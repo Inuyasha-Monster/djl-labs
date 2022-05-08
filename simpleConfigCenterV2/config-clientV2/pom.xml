@@ -6,15 +6,11 @@
         <artifactId>djl-labs</artifactId>
         <groupId>com.djl</groupId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>grpc-demo</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>grpc-client</module>
-        <module>grpc-server</module>
-    </modules>
+    <artifactId>config-clientV2</artifactId>
 
 
 </project>
