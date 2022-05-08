@@ -23,7 +23,18 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="config-client" options="-parameters" />
+      <module name="config-clientV2" options="-parameters" />
+      <module name="config-server" options="-parameters" />
+      <module name="config-serverV2" options="-parameters" />
+      <module name="grpc-client" options="-parameters" />
+      <module name="grpc-feature" options="-parameters" />
+      <module name="grpc-server" options="-parameters" />
+      <module name="netty-client" options="-parameters" />
+      <module name="netty-demo" options="-parameters" />
+      <module name="netty-server" options="-parameters" />
       <module name="simpleConfigCenterV1" options="" />
+      <module name="simpleConfigCenterV2" options="-parameters" />
     </option>
   </component>
 </project>
