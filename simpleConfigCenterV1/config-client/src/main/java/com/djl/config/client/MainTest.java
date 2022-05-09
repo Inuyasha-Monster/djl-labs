@@ -2,7 +2,9 @@ package com.djl.config.client;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
@@ -39,7 +41,8 @@ public class MainTest {
                 HttpURLConnection connection = ((HttpURLConnection) url.openConnection());
                 connection.setConnectTimeout(1000);
                 connection.setReadTimeout(30000);
-                final String message = connection.getResponseMessage();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                final String message = reader.readLine();
                 if (message != null && message.trim().length() > 0 && message.contains("changed")) {
                     System.out.println("long poll response message = " + message);
                     CONFIG_QUERY_EXECUTOR.execute(new ConfigQueryTask(this.listenConfigKey));
@@ -65,27 +68,34 @@ public class MainTest {
 
         @Override
         public void run() {
-            final URL url;
             try {
-                url = new URL("http://127.0.0.1:20000/config/get/" + this.changedConfigKey);
-                HttpURLConnection connection = ((HttpURLConnection) url.openConnection());
-                connection.setConnectTimeout(1000);
-                connection.setReadTimeout(3000);
-                final String responseMessage = connection.getResponseMessage();
-                System.out.println(this.changedConfigKey + " new config value = " + responseMessage);
-                listenConfigValue = responseMessage;
+                final String configValue = getConfigValue(this.changedConfigKey);
+                System.out.println(this.changedConfigKey + " new config value = " + configValue);
+                listenConfigValue = configValue;
             } catch (IOException e) {
                 log.error("ConfigQueryTask error", e);
             }
         }
     }
 
+    private static String getConfigValue(String configKey) throws IOException {
+        final URL url = new URL("http://127.0.0.1:20000/config/get/" + configKey);
+        HttpURLConnection connection = ((HttpURLConnection) url.openConnection());
+        connection.setConnectTimeout(1000);
+        connection.setReadTimeout(3000);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        return reader.readLine();
+    }
+
     private final static String LISTEN_CONFIG_KEY = "name";
 
     private static volatile String listenConfigValue = "";
 
-    public static void main(String[] args) {
-        CONFIG_LONG_POLL_EXECUTOR.scheduleAtFixedRate(new ConfigLongPollTask(LISTEN_CONFIG_KEY), 0, 30, TimeUnit.SECONDS);
+    public static void main(String[] args) throws IOException {
+
+        listenConfigValue = getConfigValue(LISTEN_CONFIG_KEY);
+
+        CONFIG_LONG_POLL_EXECUTOR.scheduleAtFixedRate(new ConfigLongPollTask(LISTEN_CONFIG_KEY), 0, 10, TimeUnit.MILLISECONDS);
         System.out.println("开启配置监听 key:" + LISTEN_CONFIG_KEY);
         CONFIG_LONG_POLL_EXECUTOR.scheduleWithFixedDelay(() -> {
             System.out.println(new Date() + " LISTEN_CONFIG_KEY's current value = " + listenConfigValue);
