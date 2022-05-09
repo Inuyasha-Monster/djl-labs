@@ -33,7 +33,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <!--默认值-->
-                    <protoSourceRoot>${project.basedir}/src/main/proto</protoSourceRoot>
+                    <protoSourceRoot>${project.basedir}/src/main/java/proto</protoSourceRoot>
                     <!--默认值-->
                     <!--<outputDirectory>${project.build.directory}/generated-sources/protobuf/java</outputDirectory>-->
                     <outputDirectory>${project.build.sourceDirectory}</outputDirectory>
