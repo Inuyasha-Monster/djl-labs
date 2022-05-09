@@ -33,14 +33,15 @@
                 <extensions>true</extensions>
                 <configuration>
                     <!--默认值-->
-                    <protoSourceRoot>${project.basedir}/src/main/java/proto</protoSourceRoot>
+                    <protoSourceRoot>${project.basedir}/proto</protoSourceRoot>
                     <!--默认值-->
                     <!--<outputDirectory>${project.build.directory}/generated-sources/protobuf/java</outputDirectory>-->
-                    <outputDirectory>${project.build.sourceDirectory}</outputDirectory>
+                    <outputDirectory>${project.build.sourceDirectory}/src/main/java/proto</outputDirectory>
                     <!--设置是否在生成java文件之前清空outputDirectory的文件，默认值为true，设置为false时也会覆盖同名文件-->
                     <clearOutputDirectory>false</clearOutputDirectory>
                     <!--默认值-->
-                    <temporaryProtoFileDirectory>${project.build.directory}/generated-sources/protobuf/java</temporaryProtoFileDirectory>
+                    <temporaryProtoFileDirectory>${project.build.directory}/generated-sources/protobuf/java
+                    </temporaryProtoFileDirectory>
                     <!--更多配置信息可以查看https://www.xolstice.org/protobuf-maven-plugin/compile-mojo.html-->
                     <protocArtifact>
                         com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}
@@ -56,7 +57,6 @@
                         <!--<configuration>-->
                         <!--<protoSourceRoot>${project.basedir}/src/main/proto</protoSourceRoot>-->
                         <!--<outputDirectory>${project.build.directory}/generated-sources/protobuf/java</outputDirectory>-->
-
                         <!--</configuration>-->
                     </execution>
                 </executions>
