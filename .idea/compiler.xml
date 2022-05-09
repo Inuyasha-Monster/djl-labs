@@ -13,6 +13,7 @@
         <module name="simpleConfigCenterV2" />
         <module name="netty-client" />
         <module name="grpc-server" />
+        <module name="grpc-proto" />
         <module name="config-client" />
         <module name="grpc-feature" />
         <module name="config-serverV2" />
@@ -29,6 +30,7 @@
       <module name="config-serverV2" options="-parameters" />
       <module name="grpc-client" options="-parameters" />
       <module name="grpc-feature" options="-parameters" />
+      <module name="grpc-proto" options="-parameters" />
       <module name="grpc-server" options="-parameters" />
       <module name="netty-client" options="-parameters" />
       <module name="netty-demo" options="-parameters" />

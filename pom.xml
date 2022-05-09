@@ -32,6 +32,7 @@
         <module>netty-demo/netty-server</module>
         <module>simpleConfigCenterV2/config-clientV2</module>
         <module>simpleConfigCenterV2/config-serverV2</module>
+        <module>grpc-demo/grpc-proto</module>
     </modules>
 
 
