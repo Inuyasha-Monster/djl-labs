@@ -13,7 +13,7 @@ import java.io.IOException;
 /**
  * @author djl
  */
-public class MaxInboundMessageSizeTest01 {
+public class MaxInboundMessageSizeTest {
     public static void main(String[] args) throws IOException, InterruptedException {
         final Server server = ServerBuilder.forPort(30000)
                 // 限制客户端发送数据的大小 defaults to 4 MiB

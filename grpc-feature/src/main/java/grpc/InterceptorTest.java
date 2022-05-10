@@ -16,7 +16,7 @@ import static grpc.Common.*;
 /**
  * @author djl
  */
-public class InterceptorTest02 {
+public class InterceptorTest {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         // 服务端拦截器

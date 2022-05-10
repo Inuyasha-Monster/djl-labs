@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * @author djl
  */
-public class GrpcExecutorTest00 {
+public class GrpcExecutorTest {
 
     private static final ThreadPoolExecutor GRPC_SERVER_EXECUTOR = new ThreadPoolExecutor(4,
             Runtime.getRuntime().availableProcessors(),
