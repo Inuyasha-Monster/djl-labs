@@ -69,7 +69,10 @@ public class HelloGrpcImpl extends HelloGrpc.HelloImplBase {
         return new StreamObserver<HelloRequest>() {
             @Override
             public void onNext(HelloRequest helloRequest) {
-                responseObserver.onNext(HelloResponse.newBuilder().setMessage("你好呀," + helloRequest.getName()).build());
+                final HelloResponse response = HelloResponse.newBuilder()
+                        .setMessage("你好呀," + helloRequest.getName())
+                        .build();
+                responseObserver.onNext(response);
             }
 
             @Override
