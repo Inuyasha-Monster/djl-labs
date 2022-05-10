@@ -1,3 +1,5 @@
+package grpc;
+
 import grpc.auto.HelloGrpc;
 import grpc.auto.HelloRequest;
 import grpc.auto.HelloResponse;
@@ -17,7 +19,7 @@ public class HelloGrpcServiceImpl extends HelloGrpc.HelloImplBase {
      */
     @Override
     public void sayHello(HelloRequest request, StreamObserver<HelloResponse> responseObserver) {
-        responseObserver.onNext(HelloResponse.newBuilder().setMessage("你好呀," + request.getName()).build());
+        responseObserver.onNext(HelloResponse.newBuilder().setMessage("hello," + request.getName()).build());
         responseObserver.onCompleted();
     }
 

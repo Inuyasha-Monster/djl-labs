@@ -11,5 +11,12 @@
 
     <artifactId>grpc-feature</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.djl</groupId>
+            <artifactId>grpc-proto</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>
