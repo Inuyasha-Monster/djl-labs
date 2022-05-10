@@ -9,8 +9,9 @@ import java.io.IOException;
  */
 public class GrpcServer {
     public static void main(String[] args) throws IOException, InterruptedException {
+        // 使用默认配置构建一个grpc的server
         final Server server = ServerBuilder.forPort(30000)
-                .addService(new HelloGrpcImpl())
+                .addService(new HelloGrpcServiceImpl())
                 .build();
         server.start();
         System.out.println("grpc server started...wait for shutdown..");

@@ -7,7 +7,14 @@ import io.grpc.stub.StreamObserver;
  * @author djl
  * @create 2022/5/9 21:25
  */
-public class HelloGrpcImpl extends HelloGrpc.HelloImplBase {
+public class HelloGrpcServiceImpl extends HelloGrpc.HelloImplBase {
+
+    /**
+     * 单次请求响应模型
+     *
+     * @param request
+     * @param responseObserver
+     */
     @Override
     public void sayHello(HelloRequest request, StreamObserver<HelloResponse> responseObserver) {
         responseObserver.onNext(HelloResponse.newBuilder().setMessage("你好呀," + request.getName()).build());
@@ -36,16 +43,22 @@ public class HelloGrpcImpl extends HelloGrpc.HelloImplBase {
                 throwable.printStackTrace();
             }
 
+            /**
+             * 客户端推送数据完成时触发
+             */
             @Override
             public void onCompleted() {
-                responseObserver.onNext(HelloResponse.newBuilder().setMessage(stringBuilder.toString()).build());
+                // 执行返回响应数据
+                final HelloResponse response = HelloResponse.newBuilder()
+                        .setMessage("你们好呀," + stringBuilder).build();
+                responseObserver.onNext(response);
                 responseObserver.onCompleted();
             }
         };
     }
 
     /**
-     * 服务端可以多次响应数据
+     * 服务端可以多次响应数据(其实跟单次请求响应模型一样，只是服务端结束的时机不同)
      *
      * @param request
      * @param responseObserver
@@ -53,13 +66,13 @@ public class HelloGrpcImpl extends HelloGrpc.HelloImplBase {
     @Override
     public void sayHelloServerStream(HelloRequest request, StreamObserver<HelloResponse> responseObserver) {
         for (int i = 0; i < 5; i++) {
-            responseObserver.onNext(HelloResponse.newBuilder().setMessage("你好呀," + request.getName()).build());
+            responseObserver.onNext(HelloResponse.newBuilder().setMessage("你好呀," + ++i + "," + request.getName()).build());
         }
         responseObserver.onCompleted();
     }
 
     /**
-     * 客户端和服务端可以一直双向推送数据
+     * 客户端和服务端可以一直双向推送数据，直到某一方完成
      *
      * @param responseObserver
      * @return
