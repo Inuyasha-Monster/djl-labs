@@ -66,7 +66,7 @@ public class HelloGrpcServiceImpl extends HelloGrpc.HelloImplBase {
     @Override
     public void sayHelloServerStream(HelloRequest request, StreamObserver<HelloResponse> responseObserver) {
         for (int i = 0; i < 5; i++) {
-            responseObserver.onNext(HelloResponse.newBuilder().setMessage("你好呀," + ++i + "," + request.getName()).build());
+            responseObserver.onNext(HelloResponse.newBuilder().setMessage("你好呀," + i + "," + request.getName()).build());
         }
         responseObserver.onCompleted();
     }

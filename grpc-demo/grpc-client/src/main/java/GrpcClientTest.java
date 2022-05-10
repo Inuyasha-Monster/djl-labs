@@ -68,4 +68,58 @@ public class GrpcClientTest {
         requestStreamObserver.onCompleted();
         countDownLatch.await();
     }
+
+    @Test
+    public void testServerStreaming() throws InterruptedException {
+        final HelloGrpc.HelloStub stub = HelloGrpc.newStub(channel);
+        CountDownLatch latch = new CountDownLatch(1);
+        final HelloRequest request = HelloRequest.newBuilder().setName("djl").build();
+        final StreamObserver<HelloResponse> responseStreamObserver = new StreamObserver<HelloResponse>() {
+            @Override
+            public void onNext(HelloResponse helloResponse) {
+                System.out.println("接受到服务端消息:" + TextFormat.printToUnicodeString(helloResponse));
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                throwable.printStackTrace();
+            }
+
+            @Override
+            public void onCompleted() {
+                latch.countDown();
+            }
+        };
+        stub.sayHelloServerStream(request, responseStreamObserver);
+        latch.await();
+    }
+
+    @Test
+    public void testBiStream() throws InterruptedException {
+        final HelloGrpc.HelloStub stub = HelloGrpc.newStub(channel);
+        CountDownLatch latch = new CountDownLatch(1);
+        final StreamObserver<HelloResponse> responseObserver = new StreamObserver<HelloResponse>() {
+            @Override
+            public void onNext(HelloResponse helloResponse) {
+                System.out.println("接受到服务端消息:" + TextFormat.printToUnicodeString(helloResponse));
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                throwable.printStackTrace();
+            }
+
+            @Override
+            public void onCompleted() {
+                latch.countDown();
+            }
+        };
+        final StreamObserver<HelloRequest> requestStreamObserver = stub.sayHelloDoubleStream(responseObserver);
+        for (int i = 0; i < 5; i++) {
+            final HelloRequest item = HelloRequest.newBuilder().setName("name" + i).build();
+            requestStreamObserver.onNext(item);
+        }
+        requestStreamObserver.onCompleted();
+        latch.await();
+    }
 }
