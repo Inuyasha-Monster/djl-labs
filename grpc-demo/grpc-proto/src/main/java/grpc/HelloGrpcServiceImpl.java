@@ -19,6 +19,9 @@ public class HelloGrpcServiceImpl extends HelloGrpc.HelloImplBase {
      */
     @Override
     public void sayHello(HelloRequest request, StreamObserver<HelloResponse> responseObserver) {
+        final String connId = Common.CONTEXT_KEY_CONN_ID.get();
+        System.out.println("connId = " + connId);
+        Common.printCurrentThreadInfo("sayHello");
         responseObserver.onNext(HelloResponse.newBuilder().setMessage("hello," + request.getName()).build());
         responseObserver.onCompleted();
     }
