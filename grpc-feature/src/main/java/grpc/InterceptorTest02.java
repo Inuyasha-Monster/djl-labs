@@ -18,7 +18,6 @@ import static grpc.Common.*;
  */
 public class InterceptorTest02 {
 
-
     public static void main(String[] args) throws IOException, InterruptedException {
         // 服务端拦截器
         final ServerInterceptor serverInterceptor = new ServerInterceptor() {
@@ -69,12 +68,16 @@ public class InterceptorTest02 {
         server.start();
         EXECUTOR.execute(() -> {
             final ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 30000)
+                    .directExecutor()
                     .usePlaintext().build();
             final HelloGrpc.HelloStub stub = HelloGrpc.newStub(channel);
-            stub.sayHello(HelloRequest.newBuilder().setName("djl").build(), new StreamObserver<HelloResponse>() {
+            final StreamObserver<HelloResponse> responseObserver = new StreamObserver<HelloResponse>() {
                 @Override
                 public void onNext(HelloResponse helloResponse) {
                     System.out.println("helloResponse = " + helloResponse);
+                    final String connId = CONTEXT_KEY_CONN_ID.get();
+                    // connId = null
+                    System.out.println("connId = " + connId);
                     printCurrentThreadInfo("onNext");
                 }
 
@@ -87,7 +90,10 @@ public class InterceptorTest02 {
                 public void onCompleted() {
 
                 }
-            });
+            };
+            for (int i = 0; i < 2; i++) {
+                stub.sayHello(HelloRequest.newBuilder().setName("djl").build(), responseObserver);
+            }
         });
         server.awaitTermination();
     }
