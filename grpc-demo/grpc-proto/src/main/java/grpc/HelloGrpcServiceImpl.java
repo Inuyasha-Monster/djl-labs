@@ -1,15 +1,29 @@
 package grpc;
 
+import com.google.protobuf.Any;
+import com.google.protobuf.ByteString;
 import grpc.auto.HelloGrpc;
 import grpc.auto.HelloRequest;
 import grpc.auto.HelloResponse;
+import grpc.auto.Payload;
 import io.grpc.stub.StreamObserver;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author djl
  * @create 2022/5/9 21:25
  */
 public class HelloGrpcServiceImpl extends HelloGrpc.HelloImplBase {
+
+    @Override
+    public void call(Payload request, StreamObserver<Payload> responseObserver) {
+        final String type = request.getType();
+        final String body = request.getBody().getValue().toString(StandardCharsets.UTF_8);
+        final Any any = Any.newBuilder().setValue(ByteString.copyFrom("你好呀," + body, StandardCharsets.UTF_8)).build();
+        responseObserver.onNext(Payload.newBuilder().setBody(any).setType(type).build());
+        responseObserver.onCompleted();
+    }
 
     /**
      * 单次请求响应模型

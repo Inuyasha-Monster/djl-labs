@@ -39,6 +39,12 @@
     </modules>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
         <!-- gRPC dependency start -->
         <dependency>
             <groupId>io.grpc</groupId>

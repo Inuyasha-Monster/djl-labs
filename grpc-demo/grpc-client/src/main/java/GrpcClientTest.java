@@ -1,7 +1,10 @@
+import com.google.protobuf.Any;
+import com.google.protobuf.ByteString;
 import com.google.protobuf.TextFormat;
 import grpc.auto.HelloGrpc;
 import grpc.auto.HelloRequest;
 import grpc.auto.HelloResponse;
+import grpc.auto.Payload;
 import io.grpc.Channel;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -9,6 +12,7 @@ import io.grpc.stub.StreamObserver;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -24,6 +28,37 @@ public class GrpcClientTest {
         channel = ManagedChannelBuilder.forAddress("localhost", 30000)
                 .usePlaintext()
                 .build();
+    }
+
+    @Test
+    public void testAny() throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+        final HelloGrpc.HelloStub stub = HelloGrpc.newStub(channel);
+        final Payload request = Payload.newBuilder()
+                .setType("hello")
+                .setBody(Any.newBuilder()
+                        .setValue(ByteString.copyFrom("djl", StandardCharsets.UTF_8))
+                        .build())
+                .build();
+        stub.call(request, new StreamObserver<Payload>() {
+            @Override
+            public void onNext(Payload payload) {
+                final String type = payload.getType();
+                final String body = payload.getBody().getValue().toString(StandardCharsets.UTF_8);
+                System.out.println("type = " + type + " body = " + body);
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                throwable.printStackTrace();
+            }
+
+            @Override
+            public void onCompleted() {
+                latch.countDown();
+            }
+        });
+        latch.await();
     }
 
     @Test

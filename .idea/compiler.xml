@@ -17,6 +17,7 @@
         <module name="grpc-feature" />
         <module name="config-serverV2" />
         <module name="config-clientV2" />
+        <module name="grpc-common" />
         <module name="netty-server" />
       </profile>
     </annotationProcessing>
@@ -28,6 +29,7 @@
       <module name="config-server" options="-parameters" />
       <module name="config-serverV2" options="-parameters" />
       <module name="grpc-client" options="-parameters" />
+      <module name="grpc-common" options="-parameters" />
       <module name="grpc-feature" options="-parameters" />
       <module name="grpc-proto" options="-parameters" />
       <module name="grpc-server" options="-parameters" />
