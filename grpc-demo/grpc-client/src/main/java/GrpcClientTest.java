@@ -101,6 +101,11 @@ public class GrpcClientTest {
             requestStreamObserver.onNext(item);
         }
         requestStreamObserver.onCompleted();
+
+        System.out.println("client send message again");
+        // java.lang.IllegalStateException: Stream is already completed, no further calls are allowed
+        requestStreamObserver.onNext(HelloRequest.newBuilder().setName("fk").build());
+
         countDownLatch.await();
     }
 
