@@ -1,4 +1,6 @@
-package transport;
+package transport.response;
+
+import transport.IPayload;
 
 /**
  * 响应实体接口标记
@@ -6,4 +8,5 @@ package transport;
  * @author djl
  */
 public interface IResponse extends IPayload {
+
 }

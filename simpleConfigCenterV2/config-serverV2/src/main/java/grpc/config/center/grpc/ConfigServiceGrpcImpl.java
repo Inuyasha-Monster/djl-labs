@@ -1,14 +1,16 @@
 package grpc.config.center.grpc;
 
 import grpc.Common;
+import grpc.GrpcConnection;
 import grpc.auto.ConfigGrpc;
 import grpc.auto.ConfigServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import transport.ConnectionSetupRequest;
-import transport.IRequest;
+import transport.request.ConnectionSetupRequest;
+import transport.request.IRequest;
+import transport.response.AckResponse;
 import util.GrpcUtil;
 
 import java.nio.charset.StandardCharsets;
@@ -22,7 +24,7 @@ public class ConfigServiceGrpcImpl extends ConfigServiceGrpc.ConfigServiceImplBa
 
     @Override
     public StreamObserver<ConfigGrpc.Request> call(StreamObserver<ConfigGrpc.Response> responseObserver) {
-        final StreamObserver<ConfigGrpc.Request> streamObserver = new StreamObserver<ConfigGrpc.Request>() {
+        return new StreamObserver<ConfigGrpc.Request>() {
 
             private final String connId = Common.CONTEXT_KEY_CONN_ID.get();
 
@@ -39,11 +41,16 @@ public class ConfigServiceGrpcImpl extends ConfigServiceGrpc.ConfigServiceImplBa
                     return;
                 }
                 // 判断是否为客户建立链接的请求
-                final IRequest req = GrpcUtil.toRequest(request);
+                final IRequest req = GrpcUtil.convertRequest(request);
                 if (req instanceof ConnectionSetupRequest) {
                     final ConnectionSetupRequest connectionSetupRequest = (ConnectionSetupRequest) req;
-                    //GrpcConnectionManger.connect(connId);
+                    final GrpcConnection connection = new GrpcConnection();
+                    connection.setListenConfigKey(connectionSetupRequest.getListenConfigKey());
+                    connection.setStreamObserver(responseObserver);
+                    GrpcConnectionManger.register(connId, connection);
 
+                    final ConfigGrpc.Response response = GrpcUtil.createResponse(new AckResponse());
+                    connection.responseToClient(response);
                 }
             }
 
@@ -63,6 +70,5 @@ public class ConfigServiceGrpcImpl extends ConfigServiceGrpc.ConfigServiceImplBa
                 GrpcConnectionManger.disconnect(connId);
             }
         };
-        return streamObserver;
     }
 }

@@ -37,47 +37,52 @@ public class GrpcServerRunner implements ApplicationListener<ContextRefreshedEve
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         final ApplicationContext context = contextRefreshedEvent.getApplicationContext();
         final ConfigServiceGrpcImpl serviceGrpc = context.getBean(ConfigServiceGrpcImpl.class);
+
+        final ServerInterceptor serverInterceptor = new ServerInterceptor() {
+            @Override
+            public <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> serverCall, Metadata metadata, ServerCallHandler<ReqT, RespT> serverCallHandler) {
+                Context ctx = Context.current()
+                        .withValue(CONTEXT_KEY_CONN_ID, serverCall.getAttributes().get(TRANS_KEY_CONN_ID))
+                        .withValue(Common.CONTEXT_KEY_CONN_REMOTE_IP, serverCall.getAttributes().get(Common.TRANS_KEY_REMOTE_IP))
+                        .withValue(Common.CONTEXT_KEY_CONN_REMOTE_PORT, serverCall.getAttributes().get(Common.TRANS_KEY_REMOTE_PORT))
+                        .withValue(Common.CONTEXT_KEY_CONN_LOCAL_PORT, serverCall.getAttributes().get(Common.TRANS_KEY_LOCAL_PORT));
+                return Contexts.interceptCall(ctx, serverCall, metadata, serverCallHandler);
+            }
+        };
+
+        final ServerTransportFilter serverTransportFilter = new ServerTransportFilter() {
+            @Override
+            public Attributes transportReady(Attributes transportAttrs) {
+                InetSocketAddress remoteAddress = (InetSocketAddress) transportAttrs
+                        .get(Grpc.TRANSPORT_ATTR_REMOTE_ADDR);
+                InetSocketAddress localAddress = (InetSocketAddress) transportAttrs
+                        .get(Grpc.TRANSPORT_ATTR_LOCAL_ADDR);
+                int remotePort = remoteAddress.getPort();
+                int localPort = localAddress.getPort();
+                String remoteIp = remoteAddress.getAddress().getHostAddress();
+                Attributes attrWrapper = transportAttrs.toBuilder()
+                        .set(TRANS_KEY_CONN_ID, System.currentTimeMillis() + "_" + remoteIp + "_" + remotePort)
+                        .set(Common.TRANS_KEY_REMOTE_PORT, remotePort)
+                        .set(Common.TRANS_KEY_REMOTE_IP, remoteIp)
+                        .set(Common.TRANS_KEY_LOCAL_PORT, localPort)
+                        .build();
+                return attrWrapper;
+            }
+
+            @Override
+            public void transportTerminated(Attributes transportAttrs) {
+                super.transportTerminated(transportAttrs);
+            }
+        };
+
         server = ServerBuilder.forPort(config.getPort())
                 .addService(serviceGrpc)
                 .directExecutor()
-                .intercept(new ServerInterceptor() {
-                    @Override
-                    public <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> serverCall, Metadata metadata, ServerCallHandler<ReqT, RespT> serverCallHandler) {
-                        Context ctx = Context.current()
-                                .withValue(CONTEXT_KEY_CONN_ID, serverCall.getAttributes().get(TRANS_KEY_CONN_ID))
-                                .withValue(Common.CONTEXT_KEY_CONN_REMOTE_IP, serverCall.getAttributes().get(Common.TRANS_KEY_REMOTE_IP))
-                                .withValue(Common.CONTEXT_KEY_CONN_REMOTE_PORT, serverCall.getAttributes().get(Common.TRANS_KEY_REMOTE_PORT))
-                                .withValue(Common.CONTEXT_KEY_CONN_LOCAL_PORT, serverCall.getAttributes().get(Common.TRANS_KEY_LOCAL_PORT));
-                        return Contexts.interceptCall(ctx, serverCall, metadata, serverCallHandler);
-                    }
-                })
-                .addTransportFilter(new ServerTransportFilter() {
-                    @Override
-                    public Attributes transportReady(Attributes transportAttrs) {
-                        InetSocketAddress remoteAddress = (InetSocketAddress) transportAttrs
-                                .get(Grpc.TRANSPORT_ATTR_REMOTE_ADDR);
-                        InetSocketAddress localAddress = (InetSocketAddress) transportAttrs
-                                .get(Grpc.TRANSPORT_ATTR_LOCAL_ADDR);
-                        int remotePort = remoteAddress.getPort();
-                        int localPort = localAddress.getPort();
-                        String remoteIp = remoteAddress.getAddress().getHostAddress();
-                        Attributes attrWrapper = transportAttrs.toBuilder()
-                                .set(Common.TRANS_KEY_CONN_ID, System.currentTimeMillis() + "_" + remoteIp + "_" + remotePort)
-                                .set(Common.TRANS_KEY_REMOTE_PORT, remotePort)
-                                .set(Common.TRANS_KEY_REMOTE_IP, remoteIp)
-                                .set(Common.TRANS_KEY_LOCAL_PORT, localPort)
-                                .build();
-                        return attrWrapper;
-                    }
-
-                    @Override
-                    public void transportTerminated(Attributes transportAttrs) {
-                        super.transportTerminated(transportAttrs);
-                    }
-                })
+                .intercept(serverInterceptor)
+                .addTransportFilter(serverTransportFilter)
                 .build();
         server.start();
-        log.info("grpc server stared listen port:{}", config.getPort());
+        log.info("grpc server stared listen port: {}", config.getPort());
     }
 
     @Override

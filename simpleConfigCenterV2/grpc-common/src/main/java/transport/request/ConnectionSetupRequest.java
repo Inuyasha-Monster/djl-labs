@@ -1,4 +1,4 @@
-package transport;
+package transport.request;
 
 import lombok.Data;
 
@@ -14,9 +14,4 @@ public class ConnectionSetupRequest implements IRequest {
      * 标记当前客户端需要监听的配置键
      */
     private String listenConfigKey;
-
-    @Override
-    public String getType() {
-        return this.getClass().getSimpleName();
-    }
 }

@@ -1,4 +1,6 @@
-package transport;
+package transport.request;
+
+import transport.IPayload;
 
 /**
  * 请求实体标记接口

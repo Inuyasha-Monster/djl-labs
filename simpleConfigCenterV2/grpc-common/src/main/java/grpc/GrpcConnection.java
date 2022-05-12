@@ -9,7 +9,10 @@ import lombok.Data;
  */
 @Data
 public final class GrpcConnection {
-    private String connId;
     private String listenConfigKey;
     private StreamObserver<ConfigGrpc.Response> streamObserver;
+
+    public void responseToClient(ConfigGrpc.Response request) {
+        this.getStreamObserver().onNext(request);
+    }
 }

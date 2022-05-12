@@ -1,5 +1,6 @@
 package grpc.config.center.grpc;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -8,10 +9,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ConfigurationProperties(prefix = "grpc")
+@Data
 public class GrpcConfig {
     private Integer port;
-
-    public Integer getPort() {
-        return port;
-    }
 }
