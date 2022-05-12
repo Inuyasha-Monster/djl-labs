@@ -91,9 +91,17 @@ public class InterceptorTest {
 
                 }
             };
+            //final StreamObserver<HelloRequest> requestStreamObserver = stub.sayHelloClientStream(responseObserver);
+            //requestStreamObserver.onNext(HelloRequest.newBuilder().setName("djl").build());
+            //requestStreamObserver.onCompleted();
+
+            final StreamObserver<HelloRequest> streamObserver = stub.sayHelloDoubleStream(responseObserver);
+
             for (int i = 0; i < 2; i++) {
-                stub.sayHello(HelloRequest.newBuilder().setName("djl").build(), responseObserver);
+                //stub.sayHello(HelloRequest.newBuilder().setName("djl").build(), responseObserver);
+                streamObserver.onNext(HelloRequest.newBuilder().setName("djl").build());
             }
+            streamObserver.onCompleted();
         });
         server.awaitTermination();
     }

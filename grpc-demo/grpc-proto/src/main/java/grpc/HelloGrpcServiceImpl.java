@@ -50,10 +50,12 @@ public class HelloGrpcServiceImpl extends HelloGrpc.HelloImplBase {
     public StreamObserver<HelloRequest> sayHelloClientStream(StreamObserver<HelloResponse> responseObserver) {
         return new StreamObserver<HelloRequest>() {
 
+            final String connId = Common.CONTEXT_KEY_CONN_ID.get();
             private final StringBuilder stringBuilder = new StringBuilder();
 
             @Override
             public void onNext(HelloRequest helloRequest) {
+                System.out.println("sayHelloClientStream connId = " + connId);
                 stringBuilder.append(helloRequest.getName()).append(";");
             }
 
@@ -99,8 +101,12 @@ public class HelloGrpcServiceImpl extends HelloGrpc.HelloImplBase {
     @Override
     public StreamObserver<HelloRequest> sayHelloDoubleStream(StreamObserver<HelloResponse> responseObserver) {
         return new StreamObserver<HelloRequest>() {
+
+            private final String connId = Common.CONTEXT_KEY_CONN_ID.get();
+
             @Override
             public void onNext(HelloRequest helloRequest) {
+                System.out.println("sayHelloDoubleStream connId = " + connId);
                 final HelloResponse response = HelloResponse.newBuilder()
                         .setMessage("你好呀," + helloRequest.getName())
                         .build();
