@@ -16,9 +16,7 @@ public final class GrpcUtil {
     public static IRequest toRequest(ConfigGrpc.Request request) {
         final String type = request.getType();
         final Class<?> modelClass = ModelRegistry.getModelClass(type);
-        if (modelClass == null) {
-            return null;
-        }
+        Objects.requireNonNull(modelClass);
         final String body = request.getBody().getValue().toString(StandardCharsets.UTF_8);
         return (IRequest) JacksonUtil.toObj(body, modelClass);
     }

@@ -1,5 +1,6 @@
 package grpc.config.center.grpc;
 
+import grpc.Common;
 import grpc.auto.ConfigGrpc;
 import grpc.auto.ConfigServiceGrpc;
 import io.grpc.stub.StreamObserver;
@@ -23,6 +24,8 @@ public class ConfigServiceGrpcImpl extends ConfigServiceGrpc.ConfigServiceImplBa
     public StreamObserver<ConfigGrpc.Request> call(StreamObserver<ConfigGrpc.Response> responseObserver) {
         final StreamObserver<ConfigGrpc.Request> streamObserver = new StreamObserver<ConfigGrpc.Request>() {
 
+            private final String connId = Common.CONTEXT_KEY_CONN_ID.get();
+
             /**
              * 客户端请求抵达
              * @param request
@@ -39,6 +42,7 @@ public class ConfigServiceGrpcImpl extends ConfigServiceGrpc.ConfigServiceImplBa
                 final IRequest req = GrpcUtil.toRequest(request);
                 if (req instanceof ConnectionSetupRequest) {
                     final ConnectionSetupRequest connectionSetupRequest = (ConnectionSetupRequest) req;
+                    //GrpcConnectionManger.connect(connId);
 
                 }
             }
@@ -47,6 +51,7 @@ public class ConfigServiceGrpcImpl extends ConfigServiceGrpc.ConfigServiceImplBa
             public void onError(Throwable throwable) {
                 log.error("grpc server onError", throwable);
                 responseObserver.onCompleted();
+                GrpcConnectionManger.disconnect(connId);
             }
 
             /**
@@ -55,6 +60,7 @@ public class ConfigServiceGrpcImpl extends ConfigServiceGrpc.ConfigServiceImplBa
             @Override
             public void onCompleted() {
                 responseObserver.onCompleted();
+                GrpcConnectionManger.disconnect(connId);
             }
         };
         return streamObserver;

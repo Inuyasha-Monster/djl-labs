@@ -1,2 +1,5 @@
 server:
   port: 20000
+
+grpc:
+  port: 30000
