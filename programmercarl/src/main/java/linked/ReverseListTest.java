@@ -56,7 +56,7 @@ public class ReverseListTest {
     }
 
     /**
-     * 通过双指针的方式实现原地反转
+     * 通过双指针的方式实现原地反转，注意该方式会原地修改指针
      *
      * @param head
      * @return
@@ -78,11 +78,44 @@ public class ReverseListTest {
         return pre;
     }
 
+    /**
+     * 通过for循环实现
+     *
+     * @param head
+     * @return
+     */
+    public static ListNode reverseList4(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode temp = null;
+        for (ListNode cur = head; cur != null; cur = cur.next) {
+            temp = new ListNode(cur.val, temp);
+        }
+        return temp;
+    }
+
+    public static ListNode reverseList3(ListNode head) {
+        return reverse(null, head);
+    }
+
+    private static ListNode reverse(ListNode pre, ListNode cur) {
+        // 定义退出递归条件
+        if (cur == null) {
+            return pre;
+        }
+        final ListNode next = cur.next;
+        cur.next = pre;
+        return reverse(cur, next);
+    }
+
+
     public static void printListNode(ListNode head) {
         while (head != null) {
             System.out.print(head.val + "->");
             head = head.next;
         }
+        System.out.println();
     }
 
     public static void main(String[] args) {
@@ -93,13 +126,22 @@ public class ReverseListTest {
 
         printListNode(head);
 
-        final ListNode reverseList = reverseList(head);
-        System.out.println();
-        printListNode(reverseList);
+        //final ListNode reverseList = reverseList(head);
+        //System.out.println();
+        //printListNode(reverseList);
+        //
+        //System.out.println();
+        //System.out.println("---plus2---");
+        //final ListNode list2 = reverseList2(head);
+        //printListNode(list2);
+        //
+        //System.out.println();
+        //System.out.println("---v3---");
+        //printListNode(head);
+        //final ListNode list3 = reverseList3(head);
+        //printListNode(list3);
 
-        System.out.println();
-        System.out.println("---plus2---");
-        final ListNode list2 = reverseList2(head);
-        printListNode(list2);
+        final ListNode list4 = reverseList4(head);
+        printListNode(list4);
     }
 }
