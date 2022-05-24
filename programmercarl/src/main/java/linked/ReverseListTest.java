@@ -29,6 +29,12 @@ public class ReverseListTest {
         }
     }
 
+    /**
+     * 通过stack的特性实现了链表的反转
+     *
+     * @param head
+     * @return
+     */
     public static ListNode reverseList(ListNode head) {
         if (head == null) {
             return null;
@@ -49,6 +55,29 @@ public class ReverseListTest {
         return newHead;
     }
 
+    /**
+     * 通过双指针的方式实现原地反转
+     *
+     * @param head
+     * @return
+     */
+    public static ListNode reverseList2(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        // 定义前指针
+        ListNode pre = null;
+        // 定义当前指针
+        ListNode cur = head;
+        while (cur != null) {
+            final ListNode next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        return pre;
+    }
+
     public static void printListNode(ListNode head) {
         while (head != null) {
             System.out.print(head.val + "->");
@@ -67,5 +96,10 @@ public class ReverseListTest {
         final ListNode reverseList = reverseList(head);
         System.out.println();
         printListNode(reverseList);
+
+        System.out.println();
+        System.out.println("---plus2---");
+        final ListNode list2 = reverseList2(head);
+        printListNode(list2);
     }
 }
