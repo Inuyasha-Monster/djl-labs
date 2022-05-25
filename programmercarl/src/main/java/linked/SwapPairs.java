@@ -38,7 +38,23 @@ public class SwapPairs {
         if (head.next == null) {
             return head;
         }
-        return null;
+        ListNode dummy = new ListNode();
+        dummy.next = head;
+        ListNode cur = dummy;
+        // 定义循环不变量判断条件：保证有连续的三个节点可供交换使用
+        while (cur != null && cur.next != null && cur.next.next != null) {
+            ListNode left = cur;
+            ListNode middle = cur.next;
+            ListNode right = middle.next;
+
+            // 交换节点(注意顺序)
+            left.next = right;
+            middle.next = right.next;
+            right.next = middle;
+
+            cur = cur.next.next;
+        }
+        return dummy.next;
     }
 
     public static void printListNode(ListNode head) {
@@ -55,5 +71,7 @@ public class SwapPairs {
         final ListNode next1 = new ListNode(2, next2);
         final ListNode head = new ListNode(1, next1);
         printListNode(head);
+        final ListNode swapPairs = swapPairs(head);
+        printListNode(swapPairs);
     }
 }
