@@ -19,18 +19,18 @@ public class TwoSum {
     public static int[] twoSum(int[] nums, int target) {
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
-            map.put(nums[i], i);
             final int tmp = target - nums[i];
             final Integer v = map.get(tmp);
             if (v != null && v != i) {
                 return new int[]{i, v};
             }
+            map.put(nums[i], i);
         }
         return null;
     }
 
     public static void main(String[] args) {
-        int[] nums = new int[]{3, 2, 4};
+        int[] nums = new int[]{3, 3};
         final int[] ints = twoSum(nums, 6);
         System.out.println("ints = " + Arrays.toString(ints));
     }
