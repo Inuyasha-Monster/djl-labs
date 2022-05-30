@@ -30,6 +30,54 @@ public class ThreeSum {
         return new ArrayList<>(results);
     }
 
+    /**
+     * 采用排序+双指针的方式
+     *
+     * @param nums
+     * @return
+     */
+    public static List<List<Integer>> threeSum2(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (nums == null || nums.length < 3) {
+            return res;
+        }
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length; i++) {
+            // 排序之后第一个元素大于0直接返回
+            if (nums[0] > 0) {
+                return res;
+            }
+            int left = i + 1;
+            int right = nums.length - 1;
+            // 排除重复结果
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            // 当左指针与右指针相遇的时候停止循环
+            while (left < right) {
+                final int value = nums[i] + nums[left] + nums[right];
+                if (value == 0) {
+                    final List<Integer> list = Arrays.asList(nums[i], nums[left], nums[right]);
+                    res.add(list);
+                    // 排除重复结果
+                    while (left < right && nums[left] == nums[left + 1]) {
+                        left++;
+                    }
+                    left++;
+                    while (left < right && nums[right] == nums[right - 1]) {
+                        right--;
+                    }
+                    right--;
+                } else if (value > 0) {
+                    right--;
+                } else {
+                    left++;
+                }
+            }
+        }
+        return res;
+    }
+
     public static void main(String[] args) {
         List<Integer> list1 = new ArrayList<>();
         list1.add(1);
