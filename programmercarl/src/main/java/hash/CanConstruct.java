@@ -63,6 +63,13 @@ public class CanConstruct {
         return true;
     }
 
+    /**
+     * 依然采用数组模拟map节省空间
+     *
+     * @param ransomNote
+     * @param magazine
+     * @return
+     */
     public static boolean canConstruct3(String ransomNote, String magazine) {
         int[] chars = new int[26];
         for (char c : magazine.toCharArray()) {

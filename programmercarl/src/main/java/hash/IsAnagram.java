@@ -45,6 +45,13 @@ public class IsAnagram {
         return m2.entrySet().stream().allMatch(x -> m1.containsKey(x.getKey()) && m1.get(x.getKey()).equals(x.getValue()));
     }
 
+    /**
+     * 通过数组模拟map进行存在判断条件
+     *
+     * @param s
+     * @param t
+     * @return
+     */
     public static boolean isAnagram2(String s, String t) {
         int[] record = new int[26];
         for (char c : s.toCharArray()) {
