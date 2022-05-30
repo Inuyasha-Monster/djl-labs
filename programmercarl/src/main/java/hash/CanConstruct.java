@@ -44,8 +44,45 @@ public class CanConstruct {
         return true;
     }
 
+    public static boolean canConstruct2(String ransomNote, String magazine) {
+        Map<Character, Integer> map = new HashMap<>();
+        for (char c : magazine.toCharArray()) {
+            map.put(c, map.getOrDefault(c, 0) + 1);
+        }
+        for (char c : ransomNote.toCharArray()) {
+            Integer value = map.get(c);
+            if (value == null) {
+                return false;
+            }
+            value = value - 1;
+            if (value < 0) {
+                return false;
+            }
+            map.put(c, value);
+        }
+        return true;
+    }
+
+    public static boolean canConstruct3(String ransomNote, String magazine) {
+        int[] chars = new int[26];
+        for (char c : magazine.toCharArray()) {
+            final int v = c - 'a';
+            chars[v]++;
+        }
+        for (char c : ransomNote.toCharArray()) {
+            final int v = c - 'a';
+            final int tmp = chars[v];
+            if (tmp <= 0) {
+                return false;
+            }
+            chars[v] = tmp - 1;
+        }
+        return true;
+    }
+
+
     public static void main(String[] args) {
-        final boolean b = canConstruct("aa", "aab");
+        final boolean b = canConstruct3("aabcc", "aabbbc");
         System.out.println("b = " + b);
     }
 }
