@@ -17,10 +17,13 @@ public class ReverseWords {
         // 保证多一个空格的空间
         char[] res = new char[chars.length + 1];
         int resIndex = 0;
-        while (end > 0) {
+        while (end >= 0) {
             // 一直从右向左推到不是空格
             while (end >= 0 && chars[end] == ' ') {
                 end--;
+            }
+            if (end <= 0) {
+                break;
             }
             int right = end;
             // 记录单词的区间
