@@ -1,22 +1,2 @@
 # RocketMQ-学习与源码分析
-> 主要是用于rocketmq的学习与技术积累，包括不限于以下的技术点
-
-## 消息的生产
-
-## 消息的消费
-
-## broker的消息的存储与检索原理
-
-## 事务消息与延时消息的工作原理
-
-## 各种长连接长轮训技术的体现
-
-## 内存映射文件的应用
-
-## NameSvr的路由管理策略
-
-## Netty在rocketmq的实战运用
-
-## HA高可用机制解读
-
-## Dledger故障转移机制解读
+> 主要是用于rocketmq的学习与技术积累，详情查看飞书文档地址：https://huolala.feishu.cn/docs/doccnAICvxfSoYEZwSSxXZ0Bznf
