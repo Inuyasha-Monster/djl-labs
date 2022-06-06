@@ -37,6 +37,7 @@
         <module>simpleConfigCenterV2/config-serverV2</module>
         <module>grpc-demo/grpc-proto</module>
         <module>programmercarl</module>
+        <module>small-mq</module>
     </modules>
 
     <dependencies>
