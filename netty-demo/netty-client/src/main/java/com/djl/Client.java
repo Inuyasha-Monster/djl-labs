@@ -2,7 +2,8 @@ package com.djl;
 
 import com.djl.common.MyDecoder;
 import com.djl.common.MyEncoder;
-import com.djl.common.MyMessage;
+import com.djl.service.HelloService;
+import com.djl.service.ResponseCallback;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -12,9 +13,7 @@ import io.netty.util.concurrent.DefaultThreadFactory;
 
 import java.net.InetSocketAddress;
 import java.util.Scanner;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * @author djl
@@ -23,7 +22,9 @@ public class Client {
 
     private static final ScheduledExecutorService CHECK_EXECUTOR = Executors.newSingleThreadScheduledExecutor(new DefaultThreadFactory("CHECK_EXECUTOR"));
 
-    private static volatile Channel channel;
+    private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(4);
+
+    public static volatile Channel channel;
 
     public static void main(String[] args) throws InterruptedException {
         final NioEventLoopGroup workerGroup = new NioEventLoopGroup(1);
@@ -62,21 +63,45 @@ public class Client {
 
             // 等待用户输入
             Scanner scanner = new Scanner(System.in);
-            while (true) {
-                final String msg = scanner.nextLine();
-                if ("exit".equals(msg)) {
-                    break;
-                }
-                if (msg != null && msg.trim().length() > 0) {
-                    channel.writeAndFlush(new MyMessage(msg)).addListener((ChannelFutureListener) channelFuture1 -> {
-                        if (channelFuture1.isSuccess()) {
-                            System.out.println("client send ok");
-                        } else {
-                            System.out.println("client send error:" + channelFuture1.cause().getMessage());
-                        }
-                    });
-                }
+
+            HelloService helloService = new HelloService();
+
+            for (int i = 0; i < 100; i++) {
+                int finalI = i;
+
+                //EXECUTOR_SERVICE.execute(() -> {
+                //    final String result = helloService.say("client num:" + finalI);
+                //    System.out.println("result = " + result);
+                //});
+
+                int finalI1 = i;
+                EXECUTOR_SERVICE.execute(() -> {
+                   helloService.sayAsync("client num:" + finalI1, new ResponseCallback() {
+                       @Override
+                       public void onResponse(Object o) {
+                           System.out.println("o = " + o);
+                       }
+                   });
+                });
             }
+
+            //while (true) {
+            //    final String msg = scanner.nextLine();
+            //    if ("exit".equals(msg)) {
+            //        break;
+            //    }
+            //    if (msg != null && msg.trim().length() > 0) {
+            //        //channel.writeAndFlush(new MyMessage(msg)).addListener((ChannelFutureListener) channelFuture1 -> {
+            //        //    if (channelFuture1.isSuccess()) {
+            //        //        System.out.println("client send ok");
+            //        //    } else {
+            //        //        System.out.println("client send error:" + channelFuture1.cause().getMessage());
+            //        //    }
+            //        //});
+            //        final String say = helloService.say(msg);
+            //        System.out.println("say = " + say);
+            //    }
+            //}
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

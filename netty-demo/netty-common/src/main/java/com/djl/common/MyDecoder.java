@@ -1,5 +1,6 @@
 package com.djl.common;
 
+import com.alibaba.fastjson.JSON;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -26,7 +27,8 @@ public class MyDecoder extends ByteToMessageDecoder {
         }
         byte[] bytes = new byte[length];
         byteBuf.readBytes(bytes);
-        final String msg = new String(bytes, StandardCharsets.UTF_8);
-        list.add(new MyMessage(msg));
+        final String json = new String(bytes, StandardCharsets.UTF_8);
+        final MyMessage msg = JSON.parseObject(json, MyMessage.class);
+        list.add(msg);
     }
 }

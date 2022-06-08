@@ -17,7 +17,7 @@ public class ServerBizHandler extends SimpleChannelInboundHandler<MyMessage> {
     protected void channelRead0(ChannelHandlerContext ctx, MyMessage myMessage) throws Exception {
         System.out.println("接收到 " + ctx.channel().remoteAddress() + " 消息 myMessage = " + myMessage.getContent());
 
-        final MyMessage response = new MyMessage("server push msg num:" + COUNTER.incrementAndGet());
+        final MyMessage response = new MyMessage(myMessage.getRequestId(), "server push msg num:" + COUNTER.incrementAndGet());
         // ctx.writeAndFlush从当前handler向前找outHandler执行
         // ctx.channel().writeAndFlush从tailHandler向前找outHandler执行
         ctx.channel().writeAndFlush(response).addListener(channelFuture -> {

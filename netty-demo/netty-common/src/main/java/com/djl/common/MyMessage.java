@@ -11,5 +11,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class MyMessage {
+    private Integer requestId;
     private String content;
 }
