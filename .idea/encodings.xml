@@ -5,6 +5,9 @@
     <file url="file://$PROJECT_DIR$/grpc-demo/grpc-proto/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/grpc-demo/grpc-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/grpc-feature/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/netty-demo/netty-client/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/netty-demo/netty-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/netty-demo/netty-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/programmercarl/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/simpleConfigCenterV1/config-client/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/simpleConfigCenterV1/config-server/src/main/java" charset="UTF-8" />

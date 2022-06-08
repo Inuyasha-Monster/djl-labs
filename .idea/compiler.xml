@@ -7,7 +7,6 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="netty-demo" />
         <module name="netty-client" />
         <module name="grpc-server" />
         <module name="grpc-proto" />
@@ -15,6 +14,7 @@
         <module name="grpc-feature" />
         <module name="config-serverV2" />
         <module name="mq-client" />
+        <module name="netty-common" />
         <module name="mq-remoting" />
         <module name="config-clientV2" />
         <module name="programmercarl" />
@@ -41,6 +41,7 @@
       <module name="mq-client" options="-parameters" />
       <module name="mq-remoting" options="-parameters" />
       <module name="netty-client" options="-parameters" />
+      <module name="netty-common" options="-parameters" />
       <module name="netty-demo" options="-parameters" />
       <module name="netty-server" options="-parameters" />
       <module name="programmercarl" options="-parameters" />
