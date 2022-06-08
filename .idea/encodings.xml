@@ -14,6 +14,7 @@
     <file url="file://$PROJECT_DIR$/simpleConfigCenterV2/config-clientV2/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/simpleConfigCenterV2/config-serverV2/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/simpleConfigCenterV2/grpc-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/small-mq/feature-test/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/small-mq/mq-broker/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/small-mq/mq-client/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/small-mq/mq-remoting/src/main/java" charset="UTF-8" />

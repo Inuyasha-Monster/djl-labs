@@ -23,6 +23,7 @@
         <module name="config-server" />
         <module name="grpc-client" />
         <module name="mq-broker" />
+        <module name="feature-test" />
       </profile>
     </annotationProcessing>
   </component>
@@ -32,6 +33,7 @@
       <module name="config-clientV2" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="config-serverV2" options="-parameters" />
+      <module name="feature-test" options="-parameters" />
       <module name="grpc-client" options="-parameters" />
       <module name="grpc-common" options="-parameters" />
       <module name="grpc-feature" options="-parameters" />

@@ -18,6 +18,7 @@
         <module>mq-remoting</module>
         <module>mq-client</module>
         <module>mq-broker</module>
+        <module>feature-test</module>
     </modules>
 
     <dependencies>
