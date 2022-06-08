@@ -37,9 +37,10 @@ public class Client {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) {
                             final ChannelPipeline pipeline = socketChannel.pipeline();
-                            pipeline.addFirst(new ClientBizHandler());
-                            pipeline.addFirst(new MyEncoder());
-                            pipeline.addFirst(new MyDecoder());
+                            pipeline.addLast(new MyDecoder());
+                            pipeline.addLast(new ConnectionHandler());
+                            pipeline.addLast(new ClientBizHandler());
+                            pipeline.addLast(new MyEncoder());
                         }
                     });
             final int port = 8888;
@@ -76,8 +77,12 @@ public class Client {
                     });
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
-            channel.closeFuture().sync();
+            if (channel != null) {
+                channel.closeFuture().sync();
+            }
             workerGroup.shutdownGracefully();
             CHECK_EXECUTOR.shutdown();
         }

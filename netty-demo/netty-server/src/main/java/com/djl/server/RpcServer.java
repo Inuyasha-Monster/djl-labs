@@ -30,10 +30,11 @@ public class RpcServer {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) {
                             final ChannelPipeline pipeline = socketChannel.pipeline();
-                            pipeline.addFirst(new ServerBizHandler());
-                            pipeline.addFirst(new MyEncoder());
-                            pipeline.addFirst(new MyDecoder());
-                            // head->MyDecoder->ServerBizHandler->MyEncoder
+                            pipeline.addLast(new MyDecoder());
+                            pipeline.addLast(new ConnectionHandler());
+                            pipeline.addLast(new ServerBizHandler());
+                            pipeline.addLast(new MyEncoder());
+                            // head->MyDecoder->ServerBizHandler->MyEncoder->tail
                         }
                     });
             //绑定端口号，启动服务端
