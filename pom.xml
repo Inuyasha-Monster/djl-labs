@@ -38,6 +38,7 @@
         <module>grpc-demo/grpc-proto</module>
         <module>programmercarl</module>
         <module>small-mq</module>
+        <module>dynamic-thread-pool-demo</module>
     </modules>
 
     <dependencies>
