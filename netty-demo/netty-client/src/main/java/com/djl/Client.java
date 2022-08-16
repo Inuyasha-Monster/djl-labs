@@ -13,7 +13,10 @@ import io.netty.util.concurrent.DefaultThreadFactory;
 
 import java.net.InetSocketAddress;
 import java.util.Scanner;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author djl
@@ -69,20 +72,18 @@ public class Client {
             for (int i = 0; i < 100; i++) {
                 int finalI = i;
 
-                //EXECUTOR_SERVICE.execute(() -> {
-                //    final String result = helloService.say("client num:" + finalI);
-                //    System.out.println("result = " + result);
-                //});
+                //final String result = helloService.say("client num:" + finalI);
+                //System.out.println("result = " + result);
 
-                int finalI1 = i;
-                EXECUTOR_SERVICE.execute(() -> {
-                   helloService.sayAsync("client num:" + finalI1, new ResponseCallback() {
-                       @Override
-                       public void onResponse(Object o) {
-                           System.out.println("o = " + o);
-                       }
-                   });
+                //int finalI1 = i;
+                //EXECUTOR_SERVICE.execute(() -> {
+                helloService.sayAsync("client num:" + finalI, new ResponseCallback() {
+                    @Override
+                    public void onResponse(Object o) {
+                        System.out.println("o = " + o);
+                    }
                 });
+                //});
             }
 
             //while (true) {
