@@ -1,0 +1,11 @@
+1、学习了Apache的HttpClient的连接池的工作原理
+
+主要是核心配置是三个timeout配置，以及单个路由的最大连接数配置和整个httpClient的最大连接数配置（这里需要评估）
+
+以及建议配置定期关闭超时的连接的机制
+
+连接过期是取的timeToLive的配置和响应头「Keep-Alive: timeout=60」的最小值，过期的连接将会被关闭
+
+注意连接池设置为非共享模式
+
+处理response的entity结果，需要使用EntityUtils.consume等方法来进行，因为底层会在流读取完毕之后释放连接归还到连接池
