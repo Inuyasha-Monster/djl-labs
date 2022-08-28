@@ -4,6 +4,8 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.config.ConnectionConfig;
+import org.apache.http.config.SocketConfig;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author djl
@@ -24,7 +27,12 @@ public class TestController {
     private final static CloseableHttpClient CLIENT;
 
     static {
-        CLIENT = HttpClients.custom().setMaxConnPerRoute(10).setMaxConnTotal(100).build();
+        CLIENT = HttpClients.custom()
+                .setConnectionManagerShared(false)
+                .setDefaultConnectionConfig(ConnectionConfig.custom().setCharset(StandardCharsets.UTF_8).build())
+                .setDefaultRequestConfig(RequestConfig.custom().setSocketTimeout(3000).setConnectTimeout(2000).setConnectionRequestTimeout(2000).build())
+                .setDefaultSocketConfig(SocketConfig.custom().setTcpNoDelay(true).build())
+                .setMaxConnPerRoute(10).setMaxConnTotal(100).build();
     }
 
     private final RestTemplate restTemplate;
@@ -43,7 +51,10 @@ public class TestController {
         CloseableHttpResponse httpResponse = null;
         String str = "error";
         try {
-            final RequestConfig config = RequestConfig.custom().setConnectionRequestTimeout(2000).build();
+            final RequestConfig config = RequestConfig.custom()
+                    .setConnectionRequestTimeout(2000)
+                    .setConnectTimeout(2000)
+                    .setSocketTimeout(3000).build();
             final HttpGet httpGet = new HttpGet("http://localhost:8080/test/hello");
             httpGet.setConfig(config);
 
