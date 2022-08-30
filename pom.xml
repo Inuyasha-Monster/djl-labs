@@ -41,6 +41,8 @@
         <module>dynamic-thread-pool-demo</module>
         <module>http-client-test</module>
         <module>http-client-test/spring-boot-test</module>
+        <module>zk-study</module>
+        <module>zk-study/basic</module>
     </modules>
 
     <dependencies>
