@@ -1,5 +1,7 @@
 package com.djl.config;
 
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +23,8 @@ public class MyConfig {
 
     @Bean(name = "httpClient")
     public RestTemplate httpClientRestTemplate(RestTemplateBuilder restTemplateBuilder) {
-        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+        final CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(httpClient);
         factory.setConnectionRequestTimeout(2000);
         return restTemplateBuilder.requestFactory(() -> factory)
                 .setConnectTimeout(Duration.ofMillis(2000))
