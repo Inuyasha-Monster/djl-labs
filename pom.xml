@@ -43,6 +43,7 @@
         <module>http-client-test/spring-boot-test</module>
         <module>zk-study</module>
         <module>zk-study/basic</module>
+        <module>pool-study</module>
     </modules>
 
     <dependencies>

@@ -29,6 +29,7 @@
         <module name="dynamic-thread-pool-demo" />
         <module name="basic" />
         <module name="spring-boot-test" />
+        <module name="pool-study" />
       </profile>
     </annotationProcessing>
   </component>
@@ -54,6 +55,7 @@
       <module name="netty-common" options="-parameters" />
       <module name="netty-demo" options="-parameters" />
       <module name="netty-server" options="-parameters" />
+      <module name="pool-study" options="-parameters" />
       <module name="programmercarl" options="-parameters" />
       <module name="simpleConfigCenterV1" options="" />
       <module name="simpleConfigCenterV2" options="-parameters" />
