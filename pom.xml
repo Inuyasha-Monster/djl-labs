@@ -44,6 +44,7 @@
         <module>zk-study</module>
         <module>zk-study/basic</module>
         <module>pool-study</module>
+        <module>jvm-study</module>
     </modules>
 
     <dependencies>

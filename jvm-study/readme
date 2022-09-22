@@ -1,0 +1,6 @@
+-XX:+UseSerialGC
+-Xms512m -Xmx512m
+-Xloggc:gc.demo.log
+-XX:+PrintGCDetails
+-XX:+PrintGCDateStamps
+
