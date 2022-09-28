@@ -24,6 +24,8 @@ public class MemoryLeakServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         //final ByteBuf reqMsg = (ByteBuf) msg;
+        // 增加虚拟机参数：-Xmx100m
+        // 没有指定堆外内存则默认维持-Xmx的大小
         COUNTER.incrementAndGet();
         //super.channelRead(ctx, msg);
         //ReferenceCountUtil.release(reqMsg);

@@ -27,6 +27,7 @@ public class Server {
                         @Override
                         protected void initChannel(NioSocketChannel ch) throws Exception {
                             final ChannelPipeline pipeline = ch.pipeline();
+                            // 如果增加解码则不会有堆外内存泄露的问题，因为解码逻辑内部包含了对ByteBuf的释放
                             //pipeline.addLast(new MyDecoder());
                             pipeline.addLast(new MemoryLeakServerHandler());
                             //pipeline.addLast(new MyEncoder());
