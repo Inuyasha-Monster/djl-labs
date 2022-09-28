@@ -45,6 +45,7 @@
         <module>zk-study/basic</module>
         <module>pool-study</module>
         <module>jvm-study</module>
+        <module>netty-advanced</module>
     </modules>
 
     <dependencies>
