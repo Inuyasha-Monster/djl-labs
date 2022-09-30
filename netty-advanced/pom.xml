@@ -15,6 +15,7 @@
     <modules>
         <module>memory-leak</module>
         <module>http-byteBuf-error</module>
+        <module>send-queue-heap-up</module>
     </modules>
 
     <properties>
