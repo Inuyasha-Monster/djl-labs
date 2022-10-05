@@ -17,6 +17,7 @@
         <module>http-byteBuf-error</module>
         <module>send-queue-heap-up</module>
         <module>channalHanler-concurrent-failed</module>
+        <module>traffic-sharpping</module>
     </modules>
 
     <properties>
