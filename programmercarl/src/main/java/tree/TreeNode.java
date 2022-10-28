@@ -133,6 +133,42 @@ public class TreeNode {
     }
 
     /**
+     * 中序：左 中 右
+     *
+     * @param root
+     * @return
+     */
+    public List<Integer> middleOrder(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.empty()) {
+            final TreeNode node = stack.pop();
+            if (node != null) {
+                // 因为栈的缘故，入栈顺序为：右 中 左，所以出栈的顺序：左 中 右边
+                if (node.right != null) {
+                    stack.push(node.right);
+                }
+
+                stack.push(node);
+                stack.push(null);
+
+                if (node.left != null) {
+                    stack.push(node.left);
+                }
+            } else {
+                // 如果node为null表示下一个节点就是需要处理的节点
+                final TreeNode waitHandle = stack.pop();
+                result.add(waitHandle.val);
+            }
+        }
+        return result;
+    }
+
+    /**
      * 后序遍历：左右中
      *
      * @param cur
