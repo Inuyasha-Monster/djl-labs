@@ -60,6 +60,41 @@ public class TreeNode {
     }
 
     /**
+     * 前序遍历：中左右，采用统一的迭代法写法
+     * 关键：在于需要在处理的节点前面做标记，所以也叫做标记法
+     *
+     * @param root
+     */
+    public List<Integer> preOrder(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.empty()) {
+            final TreeNode node = stack.pop();
+            if (node != null) {
+                // 解释一下为啥上述是：先右后左，是因为stack是先进后出，
+                // 所以到时候弹出的话就是先left后right，这样就形成了中左右的左右
+                if (node.right != null) {
+                    stack.push(node.right);
+                }
+                if (node.left != null) {
+                    stack.push(node.left);
+                }
+                // 这里解释为啥需要把node加入回去stack，是因为把需要处理的节点暂存起来然后在前面用null标记它是需要处理的
+                stack.push(node);
+                stack.push(null);
+            } else {
+                final TreeNode handleNode = stack.pop();
+                result.add(handleNode.val);
+            }
+        }
+        return result;
+    }
+
+    /**
      * 中序遍历：左中右
      *
      * @param cur
