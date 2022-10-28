@@ -1,9 +1,6 @@
 package tree;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * @author djl
@@ -237,6 +234,37 @@ public class TreeNode {
                 final TreeNode waitHandle = stack.pop();
                 result.add(waitHandle.val);
             }
+        }
+        return result;
+    }
+
+    /**
+     * 层序遍历二叉树
+     *
+     * @param root
+     * @return
+     */
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            List<Integer> list = new ArrayList<>();
+            final int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                final TreeNode node = queue.remove();
+                list.add(node.val);
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+            result.add(list);
         }
         return result;
     }
