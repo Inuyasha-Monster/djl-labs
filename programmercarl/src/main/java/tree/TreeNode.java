@@ -205,6 +205,42 @@ public class TreeNode {
         Collections.reverse(list);
     }
 
+    /**
+     * 统一迭代法后序遍历：左 右 中
+     *
+     * @param root
+     * @return
+     */
+    public List<Integer> postOrder(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.empty()) {
+            final TreeNode node = stack.pop();
+            if (node != null) {
+
+                stack.push(node);
+                stack.push(null);
+
+                if (node.right != null) {
+                    stack.push(node.right);
+                }
+
+                if (node.left != null) {
+                    stack.push(node.left);
+                }
+            } else {
+                // 如果node为null表示下一个节点就是需要处理的节点
+                final TreeNode waitHandle = stack.pop();
+                result.add(waitHandle.val);
+            }
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         final TreeNode root = new TreeNode(2);
         root.left = new TreeNode(1);
