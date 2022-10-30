@@ -136,6 +136,39 @@ public class Test {
         return result;
     }
 
+    /**
+     * 二叉树的最小深度：root节点到最近的叶子节点的节点数量
+     *
+     * @param root
+     * @return
+     */
+    public int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        int minDepth = 0;
+        while (!queue.isEmpty()) {
+            final int size = queue.size();
+            minDepth++;
+            for (int i = 0; i < size; i++) {
+                final TreeNode node = queue.remove();
+                // 如果是叶子节点直接返回结果
+                if (node.left == null && node.right == null) {
+                    return minDepth;
+                }
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+        }
+        return minDepth;
+    }
+
     public static void main(String[] args) {
 
     }
