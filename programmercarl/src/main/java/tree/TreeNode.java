@@ -239,7 +239,7 @@ public class TreeNode {
     }
 
     /**
-     * 层序遍历二叉树
+     * 层序遍历二叉树，借助队列实现层的分割
      *
      * @param root
      * @return
@@ -269,6 +269,260 @@ public class TreeNode {
         return result;
     }
 
+    /**
+     * 递归实现层序遍历
+     *
+     * @param root
+     * @return
+     */
+    public static List<List<Integer>> levelOrder2(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        internalHandle(root, 0, result);
+        return result;
+    }
+
+    /**
+     * 递归三部曲：定义方法的参数和返回值；定义退出条件；定义单层逻辑
+     *
+     * @param cur
+     * @param deep
+     * @param result
+     */
+    private static void internalHandle(TreeNode cur, int deep, List<List<Integer>> result) {
+        if (cur == null) {
+            return;
+        }
+        // 默认从0开始，所以我们从第一层开始
+        deep++;
+        // 如果结果集长度小于深度，则增加一层结果用于存放当层二叉树节点
+        if (result.size() < deep) {
+            List<Integer> list = new ArrayList<>();
+            result.add(list);
+        }
+        result.get(deep - 1).add(cur.val);
+        // 单层逻辑递归处理
+        internalHandle(cur.left, deep, result);
+        internalHandle(cur.right, deep, result);
+    }
+
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            List<Integer> list = new ArrayList<>();
+            final int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                final TreeNode node = queue.remove();
+                list.add(node.val);
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+            result.add(list);
+        }
+        Collections.reverse(result);
+        return result;
+    }
+
+    public List<Integer> rightSideView(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) {
+            return Collections.emptyList();
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            List<Integer> list = new ArrayList<>();
+            final int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                final TreeNode node = queue.remove();
+                list.add(node.val);
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+            result.add(list);
+        }
+        // 从每层结果集中取最末尾的节点形成最后结果返回
+        List<Integer> nums = new ArrayList<>();
+        for (List<Integer> list : result) {
+            nums.add(list.get(list.size() - 1));
+        }
+        return nums;
+    }
+
+    public List<Integer> rightSideView2(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            final int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                final TreeNode node = queue.remove();
+                // 如果出队的是最后一个元素则加入结果集
+                if (i == size - 1) {
+                    result.add(node.val);
+                }
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+        }
+        return result;
+    }
+
+    public List<Double> averageOfLevels(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) {
+            return Collections.emptyList();
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            List<Integer> list = new ArrayList<>();
+            final int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                final TreeNode node = queue.remove();
+                list.add(node.val);
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+            result.add(list);
+        }
+        // 从每层结果集中取最末尾的节点形成最后结果返回
+        List<Double> nums = new ArrayList<>();
+        for (List<Integer> list : result) {
+            double total = 0;
+            for (Integer num : list) {
+                total += num;
+            }
+            nums.add(total / list.size());
+        }
+        return nums;
+    }
+
+    public List<Double> averageOfLevels2(TreeNode root) {
+        List<Double> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            double total = 0;
+            final int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                final TreeNode node = queue.remove();
+                total += node.val;
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+            result.add(total / size);
+        }
+        return result;
+    }
+
+    static class Node {
+        public int val;
+        public List<Node> children;
+
+        public Node() {
+        }
+
+        public Node(int _val) {
+            val = _val;
+        }
+
+        public Node(int _val, List<Node> _children) {
+            val = _val;
+            children = _children;
+        }
+    }
+
+    /**
+     * 层序遍历多叉树
+     *
+     * @param root
+     * @return
+     */
+    public List<List<Integer>> levelOrder(Node root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            // 单层结果集
+            List<Integer> list = new ArrayList<>();
+            // 单层节点数量
+            final int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                final Node node = queue.remove();
+                list.add(node.val);
+                // 遍地当前节点的所有孩子
+                if (node.children != null) {
+                    queue.addAll(node.children);
+                }
+            }
+            result.add(list);
+        }
+        return result;
+    }
+
+    public List<Integer> largestValues(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            // 单层结果
+            int max = queue.peek().val;
+            // 单层节点数量
+            final int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                final TreeNode node = queue.remove();
+                if (max < node.val) {
+                    max = node.val;
+                }
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+            result.add(max);
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         final TreeNode root = new TreeNode(2);
         root.left = new TreeNode(1);
@@ -289,5 +543,8 @@ public class TreeNode {
         list.clear();
         postTraversalByIterator(root, list);
         System.out.println("list = " + list);
+
+        final List<List<Integer>> lists = levelOrder2(root);
+        System.out.println("lists = " + lists);
     }
 }
