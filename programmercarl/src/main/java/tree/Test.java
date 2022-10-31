@@ -242,6 +242,93 @@ public class Test {
         cur.right = tmp;
     }
 
+    /**
+     * 层序遍历实现反转，实际上就是反转每一个子二叉树就可以完成整个二叉树的反转
+     *
+     * @param root
+     * @return
+     */
+    public TreeNode invertTree2(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            final int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                final TreeNode node = queue.remove();
+                swap(node);
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+        }
+        return root;
+    }
+
+    /**
+     * 标记法前序实现反转
+     *
+     * @param root
+     * @return
+     */
+    public TreeNode invertTree4(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        stack.add(root);
+        while (!stack.empty()) {
+            final TreeNode node = stack.pop();
+            if (node != null) {
+                stack.push(node);
+                stack.push(null);
+
+                if (node.right != null) {
+                    stack.push(node.right);
+                }
+                if (node.left != null) {
+                    stack.push(node.left);
+                }
+            } else {
+                final TreeNode cur = stack.pop();
+                swap(cur);
+            }
+        }
+        return root;
+    }
+
+
+    /**
+     * 迭代法实现反转，前序：中 左 右
+     *
+     * @param root
+     * @return
+     */
+    public TreeNode invertTree3(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.empty()) {
+            final TreeNode node = stack.pop();
+            swap(node);
+            if (node.right != null) {
+                stack.push(node.right);
+            }
+            if (node.left != null) {
+                stack.push(node.left);
+            }
+        }
+        return root;
+    }
+
+
     public static void main(String[] args) {
 
     }
