@@ -137,6 +137,31 @@ public class Test {
     }
 
     /**
+     * 后序求解树的高度
+     *
+     * @param node
+     * @return
+     */
+    private int getMaxHeight(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        final int leftH = getMaxHeight(node.left);
+        final int rightH = getMaxHeight(node.right);
+        return 1 + Math.max(leftH, rightH);
+    }
+
+    /**
+     * 递归求最大深度，其实就是求树的高度
+     *
+     * @param root
+     * @return
+     */
+    public int maxDepth2(TreeNode root) {
+        return getMaxHeight(root);
+    }
+
+    /**
      * 二叉树的最小深度：root节点到最近的叶子节点的节点数量
      *
      * @param root
@@ -167,6 +192,54 @@ public class Test {
             }
         }
         return minDepth;
+    }
+
+    /**
+     * 后序遍历：左 右 中，因为这里需要从叶子节点开始层层将结果返回到上一层
+     *
+     * @param node
+     * @return
+     */
+    private int getMinHeight(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        final int leftH = getMinHeight(node.left);
+        final int rightH = getMinHeight(node.right);
+        // 注意最小深度需要额外判断当前节点是否存在左右节点
+        if (node.right == null) {
+            return 1 + leftH;
+        }
+        if (node.left == null) {
+            return 1 + rightH;
+        }
+        return 1 + Math.min(leftH, rightH);
+    }
+
+    public int minDepth2(TreeNode root) {
+        return getMinHeight(root);
+    }
+
+    /**
+     * 反转二叉树，根据前序进行处理：中 左 右边
+     *
+     * @param root
+     * @return
+     */
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        swap(root);
+        invertTree(root.left);
+        invertTree(root.right);
+        return root;
+    }
+
+    private void swap(TreeNode cur) {
+        final TreeNode tmp = cur.left;
+        cur.left = cur.right;
+        cur.right = tmp;
     }
 
     public static void main(String[] args) {
