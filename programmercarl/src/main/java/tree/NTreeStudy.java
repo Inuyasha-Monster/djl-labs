@@ -54,7 +54,7 @@ public class NTreeStudy {
     }
 
     /**
-     * 递归法
+     * 递归法前序遍历N叉树
      *
      * @param root
      * @return
@@ -75,6 +75,71 @@ public class NTreeStudy {
                 preorderImpl(child, result);
             }
         }
+    }
+
+    /**
+     * 递归后序遍历N叉树:左 右 中
+     *
+     * @param root
+     * @return
+     */
+    public List<Integer> postorder(Node root) {
+        final ArrayList<Integer> result = new ArrayList<>();
+        postorderImpl(root, result);
+        return result;
+    }
+
+    /**
+     * 递归后序
+     *
+     * @param cur
+     * @param result
+     */
+    private void postorderImpl(Node cur, List<Integer> result) {
+        if (cur == null) {
+            return;
+        }
+        // 先处理孩子节点
+        if (cur.children != null) {
+            for (Node child : cur.children) {
+                postorderImpl(child, result);
+            }
+        }
+        // 再处理中间节点
+        result.add(cur.val);
+    }
+
+    /**
+     * 统一迭代法(标记法)后序N叉树：左 右 中
+     *
+     * @param root
+     * @return
+     */
+    public List<Integer> postorder2(Node root) {
+        List<Integer> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        Stack<Node> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.empty()) {
+            final Node node = stack.pop();
+            if (node != null) {
+                stack.push(node);
+                stack.push(null);
+
+                // 处理孩子因为栈的原因为右到左
+                if (node.children != null) {
+                    for (int i = 0; i < node.children.size(); i++) {
+                        stack.push(node.children.get(node.children.size() - 1 - i));
+                    }
+                }
+            } else {
+                final Node pop = stack.pop();
+                result.add(pop.val);
+            }
+        }
+        return result;
     }
 
     public static void main(String[] args) {

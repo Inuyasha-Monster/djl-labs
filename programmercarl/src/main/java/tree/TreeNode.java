@@ -203,7 +203,7 @@ public class TreeNode {
     }
 
     /**
-     * 统一迭代法后序遍历：左 右 中
+     * 统一迭代法（标记法）后序遍历：左 右 中
      *
      * @param root
      * @return
