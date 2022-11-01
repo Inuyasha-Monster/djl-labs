@@ -523,6 +523,69 @@ public class TreeNode {
         return result;
     }
 
+    /**
+     * 递归判断是否对称二叉树
+     * 1、确定参数和返回值
+     * 2、确定退出条件
+     * 3、定义单层逻辑
+     *
+     * @param left  左侧节点
+     * @param right 右侧节点
+     * @return 是否对称
+     */
+    private boolean test(TreeNode left, TreeNode right) {
+        if (left == null && right == null) {
+            return true;
+        } else if (left == null) {
+            return false;
+        } else if (right == null) {
+            return false;
+        } else if (left.val != right.val) {
+            return false;
+        }
+        final boolean b1 = test(left.left, right.right);
+        final boolean b2 = test(left.right, right.left);
+        return b1 && b2;
+    }
+
+    public boolean isSymmetric(TreeNode root) {
+        return test(root.left, root.right);
+    }
+
+    /**
+     * 迭代法通过队列实现
+     *
+     * @param root
+     * @return
+     */
+    public boolean isSymmetric2(TreeNode root) {
+        if (root == null) {
+            return false;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root.left);
+        queue.add(root.right);
+        while (!queue.isEmpty()) {
+            final TreeNode leftNode = queue.remove();
+            final TreeNode rightNode = queue.remove();
+            if (leftNode == null && rightNode == null) {
+                continue;
+            }
+
+            if (leftNode == null || rightNode == null || leftNode.val != rightNode.val) {
+                return false;
+            }
+
+            queue.add(leftNode.left);
+            queue.add(rightNode.right);
+
+            queue.add(leftNode.right);
+            queue.add(rightNode.left);
+        }
+        return true;
+    }
+
+
     public static void main(String[] args) {
         final TreeNode root = new TreeNode(2);
         root.left = new TreeNode(1);
