@@ -585,6 +585,91 @@ public class TreeNode {
         return true;
     }
 
+    /**
+     * 统计完全二叉树的节点数量(先按照普通二叉树的层序遍历求解)
+     *
+     * @param root
+     * @return
+     */
+    public int countNodes(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        int count = 0;
+        while (!queue.isEmpty()) {
+            final int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                final TreeNode node = queue.remove();
+                count++;
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+        }
+        return count;
+    }
+
+    /**
+     * 递归后序求解
+     *
+     * @param root
+     * @return
+     */
+    public int countNodes2(TreeNode root) {
+        return countNodes2Impl(root);
+    }
+
+    /**
+     * 按照普通二叉树后序递归
+     *
+     * @param node
+     * @return
+     */
+    public int countNodes2Impl(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        final int l = countNodes2Impl(node.left);
+        final int r = countNodes2Impl(node.right);
+        return 1 + l + r;
+    }
+
+    /**
+     * 按照完全二叉树的递归
+     *
+     * @param node
+     * @return
+     */
+    public int countNodes3Impl(TreeNode node) {
+        // 思路：由于是完全二叉树，所以比较「左子树的深度」等于「右子树的深度」则为满二叉树
+        // 然后通过满二叉树的公示求解：2^n - 1
+        if (node == null) {
+            return 0;
+        }
+        TreeNode left = node.left;
+        TreeNode right = node.right;
+        // 分别求解左右子树的深度
+        int leftDepth = 0;
+        int rightDepth = 0;
+        while (left != null) {
+            left = left.left;
+            leftDepth++;
+        }
+        while (right != null) {
+            right = right.right;
+            rightDepth++;
+        }
+        if (leftDepth == rightDepth) {
+            return (2 << leftDepth) - 1;
+        }
+        return countNodes3Impl(node.left) + countNodes3Impl(node.right) + 1;
+    }
+
 
     public static void main(String[] args) {
         final TreeNode root = new TreeNode(2);
