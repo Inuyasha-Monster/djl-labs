@@ -670,7 +670,6 @@ public class TreeNode {
         return countNodes3Impl(node.left) + countNodes3Impl(node.right) + 1;
     }
 
-
     public static void main(String[] args) {
         final TreeNode root = new TreeNode(2);
         root.left = new TreeNode(1);
