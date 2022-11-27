@@ -46,6 +46,7 @@
         <module>pool-study</module>
         <module>jvm-study</module>
         <module>netty-advanced</module>
+        <module>redis-client-study</module>
     </modules>
 
     <dependencies>
