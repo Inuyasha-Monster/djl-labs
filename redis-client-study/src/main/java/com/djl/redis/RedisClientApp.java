@@ -1,13 +1,14 @@
 package com.djl.redis;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelInitializer;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.redis.RedisArrayAggregator;
+import io.netty.handler.codec.redis.RedisBulkStringAggregator;
+import io.netty.handler.codec.redis.RedisDecoder;
+import io.netty.handler.codec.redis.RedisEncoder;
 
 import java.util.Scanner;
 
@@ -16,10 +17,6 @@ import java.util.Scanner;
  */
 public class RedisClientApp {
     public static void main(String[] args) throws InterruptedException {
-
-        Decoder decoder = new Decoder();
-        Encoder encoder = new Encoder();
-
         // 配置netty client连接redis-server
         Bootstrap b = new Bootstrap();
         final NioEventLoopGroup group = new NioEventLoopGroup();
@@ -28,8 +25,13 @@ public class RedisClientApp {
                     .channel(NioSocketChannel.class)
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(decoder).addLast(encoder);
+                        protected void initChannel(SocketChannel ch) throws Exception {
+                            ChannelPipeline pipeline = ch.pipeline();
+                            pipeline.addLast(new RedisDecoder());
+                            pipeline.addLast(new RedisBulkStringAggregator());
+                            pipeline.addLast(new RedisArrayAggregator());
+                            pipeline.addLast(new RedisEncoder());
+                            pipeline.addLast(new RedisClientHandler());
                         }
                     });
             final Channel channel = b.connect("localhost", 6379).sync().channel();
@@ -39,6 +41,7 @@ public class RedisClientApp {
             while (true) {
                 final String line = scanner.nextLine();
                 if (line == null || "".equals(line) || "exit".equals(line)) {
+                    channel.close().sync();
                     System.out.println("exit ok");
                     return;
                 }

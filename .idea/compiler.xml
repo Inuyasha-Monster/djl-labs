@@ -13,6 +13,7 @@
         <module name="mq-client" />
         <module name="netty-common" />
         <module name="mq-remoting" />
+        <module name="redis-client-study" />
         <module name="config-clientV2" />
         <module name="grpc-common" />
         <module name="netty-server" />
@@ -68,6 +69,7 @@
       <module name="netty-server" options="-parameters" />
       <module name="pool-study" options="-parameters" />
       <module name="programmercarl" options="-parameters" />
+      <module name="redis-client-study" options="-parameters" />
       <module name="send-queue-heap-up" options="-parameters" />
       <module name="simpleConfigCenterV1" options="" />
       <module name="simpleConfigCenterV2" options="-parameters" />
