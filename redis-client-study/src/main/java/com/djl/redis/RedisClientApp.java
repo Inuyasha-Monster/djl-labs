@@ -27,9 +27,12 @@ public class RedisClientApp {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
+                            // 解码器
                             pipeline.addLast(new RedisDecoder());
                             pipeline.addLast(new RedisBulkStringAggregator());
                             pipeline.addLast(new RedisArrayAggregator());
+
+                            // 编码器
                             pipeline.addLast(new RedisEncoder());
                             pipeline.addLast(new RedisClientHandler());
                         }
