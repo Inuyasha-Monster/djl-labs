@@ -121,6 +121,33 @@ public class TreeNode2 {
         }
     }
 
+    /**
+     * 求解二叉树的左叶子的和，左叶子：该节点没有左右孩子，且是父节点的左孩子
+     *
+     * @param node
+     * @return
+     */
+    public int sumOfLeftLeaves(TreeNode node) {
+        // 退出条件
+        if (node == null) {
+            return 0;
+        }
+        // 其中叶子节点也直接返回
+        if (node.left == null && node.right == null) {
+            return 0;
+        }
+        // 单层逻辑：左 右 中
+        int leftSum = sumOfLeftLeaves(node.left); // 计算左子树的左叶子之和
+
+        // 判断当前节点是否可以直接算左子树的左叶子之和
+        if (node.left != null && node.left.left == null && node.left.right == null) {
+            leftSum = node.left.val;
+        }
+
+        final int rightSum = sumOfLeftLeaves(node.right); // 计算右子树的左叶子之和
+        return leftSum + rightSum;
+    }
+
     public static void main(String[] args) {
 
     }
