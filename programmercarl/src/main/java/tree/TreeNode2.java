@@ -1,5 +1,8 @@
 package tree;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author djl
  */
@@ -76,6 +79,46 @@ public class TreeNode2 {
         }
         // 特别说明：leetcode 默认叶子节点的高度是1度，所以这里是 1+x
         return 1 + Math.max(leftH, rightH); // 中
+    }
+
+    /**
+     * 记录二叉树的所有路径，这里由于是从中节点出发，所以这里采用：前序（中左有）
+     *
+     * @param root
+     * @return
+     */
+    public List<String> binaryTreePaths(TreeNode root) {
+        final ArrayList<String> result = new ArrayList<>();
+        process(root, new ArrayList<>(), result);
+        return result;
+    }
+
+    private void process(TreeNode node, List<Integer> path, List<String> result) {
+
+        // 单层逻辑
+        path.add(node.val); // 中
+
+        // 退出条件：遍历到叶子节点，然后把path记录到result中
+        if (node.left == null && node.right == null) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < path.size() - 1; i++) {
+                sb.append(path.get(i)).append("->");
+            }
+            sb.append(path.get(path.size() - 1));
+            result.add(sb.toString());
+            return;
+        }
+
+        if (node.left != null) { // 左
+            process(node.left, path, result);
+            // 回溯，需要与递归成对
+            path.remove(path.size() - 1);
+        }
+        if (node.right != null) { // 右
+            process(node.right, path, result);
+            // 回溯，需要与递归成对
+            path.remove(path.size() - 1);
+        }
     }
 
     public static void main(String[] args) {
