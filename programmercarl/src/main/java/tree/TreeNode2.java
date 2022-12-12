@@ -181,6 +181,87 @@ public class TreeNode2 {
         return result;
     }
 
+    /**
+     * 采用递归遍历的方式，其实就是找寻深度最大的节点的值，知识要求先遍历左孩子再遍历右孩子，因为是找最左侧的节点的值
+     *
+     * @param root
+     * @return
+     */
+    public int findBottomLeftValue2(TreeNode root) {
+        findLeftValue(root, 0);
+        return value;
+    }
+
+    private int Deep = -1;
+    private int value = 0;
+
+    private void findLeftValue(TreeNode root, int deep) {
+        if (root.left == null && root.right == null) {
+            if (deep > Deep) {
+                value = root.val;
+                Deep = deep;
+            }
+            return;
+        }
+        if (root.left != null) {
+            deep++;
+            findLeftValue(root.left, deep);
+            deep--;
+        }
+        if (root.right != null) {
+            deep++;
+            findLeftValue(root.right, deep);
+            deep--;
+        }
+    }
+
+    /**
+     * 给你二叉树的根节点 root 和一个表示目标和的整数 targetSum 。判断该树中是否存在 根节点到叶子节点 的路径，
+     * 这条路径上所有节点值相加等于目标和 targetSum 。如果存在，返回 true ；否则，返回 false 。
+     *
+     * @param root
+     * @param targetSum
+     * @return
+     */
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        if (root == null) {
+            return false;
+        }
+        final ArrayList<Integer> results = new ArrayList<>();
+        collectPathSum(root, new ArrayList<>(), results);
+        for (Integer v : results) {
+            if (v == targetSum) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void collectPathSum(TreeNode node, List<Integer> paths, List<Integer> results) {
+
+        // 中
+        paths.add(node.val);
+
+        // 终止条件：叶子节点
+        if (node.left == null && node.right == null) {
+            int sum = 0;
+            for (Integer v : paths) {
+                sum += v;
+            }
+            results.add(sum);
+            return;
+        }
+
+        if (node.left != null) {
+            collectPathSum(node.left, paths, results);
+            paths.remove(paths.size() - 1);
+        }
+        if (node.right != null) {
+            collectPathSum(node.right, paths, results);
+            paths.remove(paths.size() - 1);
+        }
+    }
+
     public static void main(String[] args) {
 
     }
