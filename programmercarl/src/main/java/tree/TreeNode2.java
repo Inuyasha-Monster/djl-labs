@@ -1,7 +1,9 @@
 package tree;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * @author djl
@@ -146,6 +148,37 @@ public class TreeNode2 {
 
         final int rightSum = sumOfLeftLeaves(node.right); // 计算右子树的左叶子之和
         return leftSum + rightSum;
+    }
+
+    /**
+     * 找出该二叉树的 最底层 最左边 节点的值
+     * 采用层序的方式：找到最后一层的第一个节点即可
+     *
+     * @param root
+     * @return
+     */
+    public int findBottomLeftValue(TreeNode root) {
+        int result = -1;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            // 当前层的节点数量
+            final int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                final TreeNode node = queue.remove();
+                // 将该层的第一个节点值暂定为结果值
+                if (i == 0) {
+                    result = node.val;
+                }
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+        }
+        return result;
     }
 
     public static void main(String[] args) {
