@@ -16,6 +16,11 @@ public class SimpleConfigServerV1 {
         SpringApplication.run(SimpleConfigServerV1.class, args);
     }
 
+    @GetMapping("/")
+    public String test1() {
+        return "hello world!";
+    }
+
     @GetMapping("/test")
     public String test() {
         return "OK";

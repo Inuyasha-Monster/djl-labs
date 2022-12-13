@@ -47,6 +47,7 @@
         <module>jvm-study</module>
         <module>netty-advanced</module>
         <module>redis-client-study</module>
+        <module>reactor</module>
     </modules>
 
     <dependencies>
