@@ -48,6 +48,7 @@
         <module>netty-advanced</module>
         <module>redis-client-study</module>
         <module>reactor</module>
+        <module>webflux-study</module>
     </modules>
 
     <dependencies>
