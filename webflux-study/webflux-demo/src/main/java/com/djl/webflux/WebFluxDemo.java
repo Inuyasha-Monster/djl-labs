@@ -40,6 +40,11 @@ public class WebFluxDemo {
         return new DispatcherHandler();
     }
 
+    /**
+     * 通过 webFilter 实现dispatcherHandler与自定义WebHandler的共存
+     *
+     * @return
+     */
     @Bean
     public WebFilter localWebFilter() {
         return new LocalWebFilter();
