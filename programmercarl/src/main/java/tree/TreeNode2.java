@@ -1,9 +1,6 @@
 package tree;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * @author djl
@@ -311,6 +308,152 @@ public class TreeNode2 {
             }
             root.right = constructMaximumBinaryTree(rightNums);
         }
+        return root;
+    }
+
+    /**
+     * 构建最大二叉树,优化版:省略数据拷贝过程
+     *
+     * @param nums [3,2,1,6,0,5]
+     * @return
+     */
+    public TreeNode constructMaximumBinaryTree2(int[] nums) {
+        return internal(nums, 0, nums.length);
+    }
+
+    private TreeNode internal(int[] nums, int start, int end) {
+        // 备注:构建一颗二叉树,由于是从root节点开始的,所以我们的遍历顺序都是前序:中左右
+
+        if (end - start < 1) {
+            return null;
+        }
+
+        if (end - start == 1) {
+            return new TreeNode(nums[start]);
+        }
+
+        // 找到数组的最大元素以及坐标
+        int maxValue = 0;
+        int index = 0;
+        for (int i = start; i < end; i++) {
+            if (nums[i] > maxValue) {
+                maxValue = nums[i];
+                index = i;
+            }
+        }
+
+        TreeNode root = new TreeNode(maxValue);
+
+        // 注意区间
+        root.left = internal(nums, start, index);
+        root.right = internal(nums, index + 1, end);
+
+        return root;
+    }
+
+    /**
+     * 根据中序数组和后序数组构建还原二叉树
+     * https://leetcode.cn/problems/construct-binary-tree-from-inorder-and-postorder-traversal/
+     *
+     * @param inorder
+     * @param postorder
+     * @return
+     */
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        // 举例:inorder = [9,3,15,20,7], postorder = [9,15,7,20,3]
+        /**
+         * 由于后序数组末尾是root节点
+         * 然后根据root节点在中序数组进行切分
+         * 再根据切分的左中序和右中序,在后序数组中切分
+         * 分别将切分的左结果赋予左节点,右结果赋予右节点
+         */
+
+        if (postorder.length == 0) {
+            return null;
+        }
+
+        int rootValue = postorder[postorder.length - 1];
+        TreeNode root = new TreeNode(rootValue);
+        // 如果是叶子节点直接返回
+        if (postorder.length == 1) {
+            return root;
+        }
+
+        // 寻找中序数组的切割点
+        int delimiterIndex = -1;
+        for (int i = 0; i < inorder.length; i++) {
+            if (inorder[i] == rootValue) {
+                delimiterIndex = i;
+                break;
+            }
+        }
+
+        // 切割中序数组为:左中序数组 和 右中序数组
+        int[] leftInorder = new int[delimiterIndex];
+        for (int i = 0; i < leftInorder.length; i++) {
+            leftInorder[i] = inorder[i];
+        }
+        int[] rightInorder = new int[inorder.length - 1 - delimiterIndex];
+        for (int i = delimiterIndex + 1, j = 0; i < inorder.length; i++, j++) {
+            rightInorder[j] = inorder[i];
+        }
+
+        // 切后序数组之前,将已经用过的末尾元素删掉
+        int[] newPostorder = new int[postorder.length - 1];
+        System.arraycopy(postorder, 0, newPostorder, 0, postorder.length - 1);
+        postorder = newPostorder;
+
+        // 根据左右中序数组长度来切割后序数组
+        int[] leftPostorder = new int[leftInorder.length];
+        for (int i = 0; i < leftPostorder.length; i++) {
+            leftPostorder[i] = postorder[i];
+        }
+        int[] rightPostorder = new int[rightInorder.length];
+        for (int i = 0, j = leftPostorder.length; i < rightPostorder.length; i++, j++) {
+            rightPostorder[i] = postorder[j];
+        }
+
+        // 构建左孩子
+        root.left = buildTree(leftInorder, leftPostorder);
+        root.right = buildTree(rightInorder, rightPostorder);
+        return root;
+    }
+
+    /**
+     * 根据中序数组和后序数组构建还原二叉树(优化版:省略数据拷贝过程)
+     *
+     * @param inorder
+     * @param postorder
+     * @return
+     */
+    public TreeNode buildTree2(int[] inorder, int[] postorder) {
+        map = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) { // 用map保存中序序列的数值对应位置
+            map.put(inorder[i], i);
+        }
+        // 左闭右开
+        return findNode(inorder, 0, inorder.length, postorder, 0, postorder.length);
+    }
+
+    /**
+     * 中序的节点值-数组索引的映射表
+     */
+    Map<Integer /*value*/, Integer /*index*/> map;  // 方便根据数值查找位置
+
+    public TreeNode findNode(int[] inorder, int inBegin, int inEnd, int[] postorder, int postBegin, int postEnd) {
+        // 参数里的范围都是:左闭右开
+        if (inBegin >= inEnd || postBegin >= postEnd) {  // 不满足左闭右开，说明没有元素，返回空树
+            return null;
+        }
+        int rootIndex = map.get(postorder[postEnd - 1]);  // 找到后序遍历的最后一个元素在中序遍历中的位置
+        TreeNode root = new TreeNode(inorder[rootIndex]);  // 构造结点
+        int lenOfLeft = rootIndex - inBegin;  // 保存中序左子树个数，用来确定后序数列的个数
+
+        root.left = findNode(inorder, inBegin, rootIndex,
+                postorder, postBegin, postBegin + lenOfLeft);
+        root.right = findNode(inorder, rootIndex + 1, inEnd,
+                postorder, postBegin + lenOfLeft, postEnd - 1); // postEnd - 1 表示忽略最后一个已经用过的元素
+
         return root;
     }
 
