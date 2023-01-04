@@ -218,6 +218,7 @@ public class TreeNode2 {
     /**
      * 给你二叉树的根节点 root 和一个表示目标和的整数 targetSum 。判断该树中是否存在 根节点到叶子节点 的路径，
      * 这条路径上所有节点值相加等于目标和 targetSum 。如果存在，返回 true ；否则，返回 false 。
+     * https://leetcode.cn/problems/path-sum/
      *
      * @param root
      * @param targetSum
@@ -229,6 +230,7 @@ public class TreeNode2 {
         }
         final ArrayList<Integer> results = new ArrayList<>();
         collectPathSum(root, new ArrayList<>(), results);
+        // 再遍历一遍对比 targetSum
         for (Integer v : results) {
             if (v == targetSum) {
                 return true;
@@ -237,6 +239,12 @@ public class TreeNode2 {
         return false;
     }
 
+    /**
+     *
+     * @param node 当前节点
+     * @param paths 跟节点到叶子节点的路径
+     * @param results 结果集
+     */
     private void collectPathSum(TreeNode node, List<Integer> paths, List<Integer> results) {
 
         // 中
@@ -254,6 +262,7 @@ public class TreeNode2 {
 
         if (node.left != null) {
             collectPathSum(node.left, paths, results);
+            // 关键:递归之后紧跟回溯,需要移除尾部元素
             paths.remove(paths.size() - 1);
         }
         if (node.right != null) {
