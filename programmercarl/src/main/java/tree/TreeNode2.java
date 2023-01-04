@@ -240,9 +240,8 @@ public class TreeNode2 {
     }
 
     /**
-     *
-     * @param node 当前节点
-     * @param paths 跟节点到叶子节点的路径
+     * @param node    当前节点
+     * @param paths   跟节点到叶子节点的路径
      * @param results 结果集
      */
     private void collectPathSum(TreeNode node, List<Integer> paths, List<Integer> results) {
@@ -269,6 +268,50 @@ public class TreeNode2 {
             collectPathSum(node.right, paths, results);
             paths.remove(paths.size() - 1);
         }
+    }
+
+    /**
+     * 根据传入的数组构建一颗最大二叉树,注意:数组长度大于0,且数组元素为正整数
+     * https://leetcode.cn/problems/maximum-binary-tree/
+     *
+     * @param nums
+     * @return
+     */
+    public TreeNode constructMaximumBinaryTree(int[] nums) {
+        // 备注:构建一颗二叉树,由于是从root节点开始的,所以我们的遍历顺序都是前序:中左右
+        if (nums.length == 1) {
+            return new TreeNode(nums[0]);
+        }
+
+        // 找到数组的最大元素以及坐标
+        int maxValue = 0;
+        int index = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > maxValue) {
+                maxValue = nums[i];
+                index = i;
+            }
+        }
+
+        TreeNode root = new TreeNode(maxValue);
+        // 构建左子树,需要判断是否有左数组
+        if (index > 0) {
+            // 构建左子树所需要的数组
+            int[] leftNums = new int[index];
+            for (int i = 0; i < leftNums.length; i++) {
+                leftNums[i] = nums[i];
+            }
+            root.left = constructMaximumBinaryTree(leftNums);
+        }
+        // 构建右子树,需要判断是否有右数组
+        if (index < nums.length - 1) {
+            int[] rightNums = new int[nums.length - 1 - index];
+            for (int i = index + 1, j = 0; i < nums.length; i++, j++) {
+                rightNums[j] = nums[i];
+            }
+            root.right = constructMaximumBinaryTree(rightNums);
+        }
+        return root;
     }
 
     public static void main(String[] args) {
