@@ -18,7 +18,7 @@ public class Main1 {
 
         ConnectionProvider provider =
                 ConnectionProvider.builder("custom")
-                        .maxConnections(1000)
+                        .maxConnections(1)
                         //.maxIdleTime(Duration.ofSeconds(20))
                         //.maxLifeTime(Duration.ofSeconds(60))
                         //.pendingAcquireTimeout(Duration.ofSeconds(60))
@@ -50,7 +50,7 @@ public class Main1 {
             // webSocketClient 如何重用已经建立的ws连接？？
 
             webSocketClient.execute(
-                            URI.create("ws://localhost:9195/event-emitter"),
+                            URI.create("ws://localhost:8080/event-emitter"),
                             session -> session
                                     .send(Mono.just(session.textMessage(msg)))
                                     // send complete 之后注册一个另外的发射动作
@@ -58,7 +58,7 @@ public class Main1 {
                                             .map(WebSocketMessage::getPayloadAsText)
                                             .doOnNext(x -> System.out.println("接收:" + x)))
                                     .then())
-                    .subscribe();
+                    .block();
 
             TimeUnit.MILLISECONDS.sleep(100);
         }
