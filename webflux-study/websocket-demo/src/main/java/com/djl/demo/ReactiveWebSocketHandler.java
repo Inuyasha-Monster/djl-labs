@@ -11,7 +11,7 @@ public class ReactiveWebSocketHandler implements WebSocketHandler {
     @Override
     public Mono<Void> handle(WebSocketSession webSocketSession) {
         return webSocketSession.send(webSocketSession.receive().doOnNext(x -> {
-                    System.out.println("get a ws message");
+                    System.out.println("接收:" + x.getPayloadAsText());
                 }).map(x -> "echo=>" + x.getPayloadAsText())
                 .map(webSocketSession::textMessage));
     }
