@@ -29,6 +29,8 @@ public class Main2 {
 
             }
         };
+        // 说一下tcp模型：默认情况会重用tcp连接，默认只会建立一个ws连接
+        // 说一下线程模型：一个读线程，一个写线程，一个连接checker线程
         wsClient.connectBlocking();
         while (true) {
             wsClient.send("demo");
