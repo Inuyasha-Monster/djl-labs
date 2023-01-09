@@ -457,6 +457,110 @@ public class TreeNode2 {
         return root;
     }
 
+    /**
+     * 合并2棵树
+     * https://leetcode.cn/problems/merge-two-binary-trees/
+     *
+     * @param root1
+     * @param root2
+     * @return
+     */
+    public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
+        if (root1 == null) return root2;
+        if (root2 == null) return root1;
+
+        TreeNode root = new TreeNode(root1.val + root2.val);
+        root.left = mergeTrees(root1.left, root2.left);
+        root.right = mergeTrees(root1.right, root2.right);
+        return root;
+    }
+
+    /**
+     * https://leetcode.cn/problems/search-in-a-binary-search-tree/
+     *
+     * @param root
+     * @param val
+     * @return
+     */
+    public TreeNode searchBST(TreeNode root, int val) {
+        if (root == null || root.val == val) return root;
+        if (root.val > val) {
+            return searchBST(root.left, val);
+        }
+        return searchBST(root.right, val);
+    }
+
+    public TreeNode searchBST2(TreeNode root, int val) {
+        while (root != null) {
+            if (root.val > val) {
+                root = root.left;
+            } else if (root.val < val) {
+                root = root.right;
+            } else {
+                return root;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * https://leetcode.cn/problems/validate-binary-search-tree/
+     * 陷阱写法：所有左子树和右子树自身必须也是二叉搜索树。
+     * 改正写法：通过 maxValue 中序比较
+     *
+     * @param root
+     * @return
+     */
+    public boolean isValidBST(TreeNode root) {
+        /**
+         if (root == null) return true;
+         if (root.left == null && root.right == null) return true;
+         if (root.left != null && root.right == null) return root.val > root.left.val;
+         if (root.left == null && root.right != null) return root.right.val > root.val;
+         // 这个有问题！
+         boolean b = root.val > root.left.val && root.right.val > root.val;
+         b &= isValidBST(root.left);
+         b &= isValidBST(root.right);
+         return b;
+         */
+
+        if (root == null) return true;
+        final boolean b = isValidBST(root.left);
+        if (max == null || max < root.val) {
+            max = root.val;
+        } else {
+            return false;
+        }
+        final boolean b1 = isValidBST(root.right);
+        return b && b1;
+    }
+
+    private Integer max;
+
+    /**
+     * 遍历二叉搜索树到数组中，然后判断是否有序
+     *
+     * @param root
+     * @return
+     */
+    public boolean isValidBST2(TreeNode root) {
+        final ArrayList<Integer> list = new ArrayList<>();
+        collectBST(root, list);
+        for (int i = 0; i < list.size() - 1; i++) {
+            if (list.get(i) >= list.get(i + 1)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void collectBST(TreeNode root, List<Integer> list) {
+        if (root == null) return;
+        collectBST(root.left, list);
+        list.add(root.val);
+        collectBST(root.right, list);
+    }
+
     public static void main(String[] args) {
 
     }
