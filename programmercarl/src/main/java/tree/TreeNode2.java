@@ -1,6 +1,7 @@
 package tree;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author djl
@@ -559,6 +560,178 @@ public class TreeNode2 {
         collectBST(root.left, list);
         list.add(root.val);
         collectBST(root.right, list);
+    }
+
+    /**
+     * 给你一个二叉搜索树的根节点 root ，返回 树中任意两不同节点值之间的最小差值 。
+     * <p>
+     * 差值是一个正数，其数值等于两值之差的绝对值。
+     * <p>
+     * https://leetcode.cn/problems/minimum-absolute-difference-in-bst/
+     *
+     * @param root
+     * @return
+     */
+    public int getMinimumDifference(TreeNode root) {
+        // 思路：关键是搜索二叉树，直接中序将树变成有序数组，然后遍历求解
+        final ArrayList<Integer> list = new ArrayList<>();
+        collect(root, list);
+        int minDiff = Integer.MAX_VALUE;
+        for (int i = 0; i < list.size() - 1; i++) {
+            final int abs = Math.abs(list.get(i) - list.get(i + 1));
+            if (abs < minDiff) {
+                minDiff = abs;
+            }
+        }
+        return minDiff;
+    }
+
+    private void collect(TreeNode root, List<Integer> list) {
+        if (root == null) {
+            return;
+        }
+        collect(root.left, list);
+        list.add(root.val);
+        collect(root.right, list);
+    }
+
+    /**
+     * 优化：搜索二叉树的遍历过程中就把最小差值给求解出来
+     *
+     * @param root
+     * @return
+     */
+    public int getMinimumDifference2(TreeNode root) {
+        collect2(root);
+        return minDiff;
+    }
+
+    private TreeNode pre;
+    private int minDiff = Integer.MAX_VALUE;
+
+    private void collect2(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        collect2(root.left);
+
+        if (pre != null && pre != root) {
+            final int abs = Math.abs(pre.val - root.val);
+            minDiff = Math.min(minDiff, abs);
+        }
+
+        if (pre == null || pre != root) {
+            pre = root;
+        }
+
+        collect2(root.right);
+    }
+
+    /**
+     * 给你一个含重复值的二叉搜索树（BST）的根节点 root ，找出并返回 BST 中的所有 众数（即，出现频率最高的元素）。
+     * <p>
+     * 如果树中有不止一个众数，可以按 任意顺序 返回。
+     * <p>
+     * https://leetcode.cn/problems/find-mode-in-binary-search-tree/
+     *
+     * @param root
+     * @return
+     */
+    public int[] findMode(TreeNode root) {
+        bts(root);
+        Integer maxCount = null;
+        List<Integer> list = new ArrayList<>();
+        final List<Map.Entry<Integer, Integer>> entries = valCountMap.entrySet().stream().sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue())).collect(Collectors.toList());
+        for (Map.Entry<Integer, Integer> entry : entries) {
+            if (maxCount == null) {
+                maxCount = entry.getValue();
+            }
+            if (entry.getValue().equals(maxCount)) {
+                list.add(entry.getKey());
+            }
+            if (entry.getValue() < maxCount) {
+                break;
+            }
+        }
+        return list.stream().mapToInt(x -> x).toArray();
+    }
+
+    private final Map<Integer, Integer> valCountMap = new HashMap<>();
+
+    private void bts(TreeNode root) {
+        if (root == null) return;
+        bts(root.left);
+        valCountMap.compute(root.val, (k, v) -> {
+            if (v == null) return 1;
+            return v + 1;
+        });
+        bts((root.right));
+    }
+
+    /**
+     * 优化版：不使用Map，且一次遍历搜索二叉树
+     *
+     * @param root
+     * @return
+     */
+    public int[] findMode2(TreeNode root) {
+        bts2(root);
+        return res.stream().mapToInt(x -> x).toArray();
+    }
+
+    private TreeNode pre2;
+    private int count = 0;
+    private int maxCount = 0;
+    private final List<Integer> res = new ArrayList<>();
+
+    private void bts2(TreeNode root) {
+        if (root == null) return;
+        bts2(root.left);
+
+        // 单层逻辑
+        if (pre2 == null || pre2.val != root.val) {
+            count = 1;
+        } else {
+            count += 1;
+        }
+        pre2 = root;
+
+        if (count > maxCount) {
+            res.clear();
+            res.add(root.val);
+            maxCount = count;
+        } else if (count == maxCount) {
+            res.add(root.val);
+        }
+
+        bts2(root.right);
+    }
+
+    /**
+     * 给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
+     * https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/
+     *
+     * @param root
+     * @param p
+     * @param q
+     * @return
+     */
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        // 找到q或者p都直接返回当前节点
+        if (root == null || root.val == p.val || root.val == q.val) return root;
+
+        // 左，需要承接返回值，返回值不为空表示找到其中一个，前提q、p不等且二叉树节点值不重复
+        final TreeNode left = lowestCommonAncestor(root.left, p, q);
+        // 右
+        final TreeNode right = lowestCommonAncestor(root.right, p, q);
+
+        // 说明当前节点就是结果，
+        if (left != null && right != null) return root;
+
+        // 如果left不为空，直接返回，注意点：q和p均存在于给定的二叉树中。
+        if (left != null) return left;
+        if (right != null) return right;
+        return null;
     }
 
     public static void main(String[] args) {
