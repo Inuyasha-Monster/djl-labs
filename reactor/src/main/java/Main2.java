@@ -11,7 +11,7 @@ public class Main2 {
         ProcessBuilder processBuilder = new ProcessBuilder();
 
         // Run this on Windows, cmd, /c = terminate after this run
-        processBuilder.command("bash", "/c", "ping -c 3 google.com");
+        processBuilder.command("ping", "-c", "1", "baidu.com");
 
         try {
 
@@ -19,7 +19,7 @@ public class Main2 {
 
             // blocked :(
             BufferedReader reader =
-                    new BufferedReader(new InputStreamReader(process1.getInputStream()));
+                    new BufferedReader(new InputStreamReader(process.getInputStream()));
 
             String line;
             while ((line = reader.readLine()) != null) {
