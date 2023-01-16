@@ -734,6 +734,160 @@ public class TreeNode2 {
         return null;
     }
 
+    /**
+     * https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/
+     * 给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。
+     *
+     * @param root 二叉搜索树
+     * @param p    在树中
+     * @param q    在树中
+     * @return
+     */
+    public TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
+        // 思路：
+        // 由于二叉搜索树的有序性，我们可以从上到下的方式遍历树，发现的首个节点在 [p,q] 之间的，则认为是最近的公共祖先
+        if (root == null) return null;
+
+        // 判断是否在左子树中寻找
+        if (root.val > p.val && root.val > q.val) {
+            final TreeNode treeNode = lowestCommonAncestor2(root.left, p, q);
+            // 判断不为空，只需要遍历单边逻辑
+            if (treeNode != null) {
+                return treeNode;
+            }
+        }
+
+        if (root.val < p.val && root.val < q.val) {
+            final TreeNode treeNode = lowestCommonAncestor2(root.right, p, q);
+            if (treeNode != null) {
+                return treeNode;
+            }
+        }
+
+        return root;
+    }
+
+    /**
+     * 遍历版本
+     *
+     * @param root
+     * @param p
+     * @param q
+     * @return
+     */
+    public TreeNode lowestCommonAncestor3(TreeNode root, TreeNode p, TreeNode q) {
+        while (root != null) {
+            if (root.val > p.val && root.val > q.val) {
+                root = root.left;
+            } else if (root.val < p.val && root.val < q.val) {
+                root = root.right;
+            } else {
+                return root;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * https://leetcode.cn/problems/insert-into-a-binary-search-tree/
+     *
+     * @param root
+     * @param val
+     * @return
+     */
+    public TreeNode insertIntoBST(TreeNode root, int val) {
+        // 将目标值插入到二叉搜索树中
+        if (root == null) {
+            return new TreeNode(val);
+        }
+
+        if (root.val > val) {
+            root.left = insertIntoBST(root.left, val);
+        }
+
+        if (root.val < val) {
+            root.right = insertIntoBST(root.right, val);
+        }
+
+        return root;
+    }
+
+    /**
+     * 迭代
+     *
+     * @param root
+     * @param val
+     * @return
+     */
+    public TreeNode insertIntoBST33(TreeNode root, int val) {
+        // 思路：找到插入值的父亲节点
+        if (root == null) {
+            return new TreeNode(val);
+        }
+        TreeNode cur = root;
+        TreeNode parent = null;
+        while (cur != null) {
+            parent = cur;
+            if (cur.val > val) {
+                cur = cur.left;
+            } else {
+                cur = cur.right;
+            }
+        }
+        if (parent.val > val) {
+            parent.left = new TreeNode(val);
+        } else {
+            parent.right = new TreeNode(val);
+        }
+        return root;
+    }
+
+    /**
+     * 删除二叉搜索树的节点
+     * https://leetcode.cn/problems/delete-node-in-a-bst/
+     *
+     * @param root
+     * @param key
+     * @return
+     */
+    public TreeNode deleteNode(TreeNode root, int key) {
+
+        if (root == null) {
+            return null;
+        }
+
+        // 思路：需要考虑删除的节点，左右孩子的情况
+        if (root.val == key) {
+            // 没有左右孩子，则直接返回空
+            if (root.left == null && root.right == null) {
+                return null;
+            } else if (root.left == null) {
+                return root.right;
+            } else if (root.right == null) {
+                return root.left;
+            } else {
+                // 将左孩子移到右孩子的左下角孩子的左子树上
+                TreeNode cur = root.right;
+                while (cur.left != null) {
+                    cur = cur.left;
+                }
+                cur.left = root.left;
+                return root.right;
+            }
+        }
+
+        if (root.val > key) {
+            root.left = deleteNode(root.left, key);
+        }
+
+        if (root.val < key) {
+            root.right = deleteNode(root.right, key);
+        }
+
+        return root;
+    }
+
+
     public static void main(String[] args) {
 
     }
