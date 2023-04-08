@@ -20,6 +20,7 @@
     <file url="file://$PROJECT_DIR$/pool-study/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/programmercarl/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/programmercarl/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/reactor/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/redis-client-study/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/simpleConfigCenterV1/config-client/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/simpleConfigCenterV1/config-server/src/main/java" charset="UTF-8" />
@@ -32,6 +33,9 @@
     <file url="file://$PROJECT_DIR$/small-mq/mq-client/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/small-mq/mq-client/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/small-mq/mq-remoting/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/webflux-study/webflux-demo/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/webflux-study/websocket-demo/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/webflux-study/ws-client-demo/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/zk-study/basic/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/zk-study/basic/src/main/resources" charset="UTF-8" />
   </component>

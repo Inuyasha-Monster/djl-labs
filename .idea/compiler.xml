@@ -11,9 +11,11 @@
         <module name="grpc-proto" />
         <module name="config-client" />
         <module name="mq-client" />
+        <module name="reactor" />
         <module name="netty-common" />
         <module name="mq-remoting" />
         <module name="redis-client-study" />
+        <module name="websocket-demo" />
         <module name="config-clientV2" />
         <module name="grpc-common" />
         <module name="netty-server" />
@@ -29,11 +31,13 @@
         <module name="http-byteBuf-error" />
         <module name="grpc-server" />
         <module name="send-queue-heap-up" />
+        <module name="webflux-demo" />
         <module name="grpc-feature" />
         <module name="config-serverV2" />
         <module name="programmercarl" />
         <module name="config-server" />
         <module name="zk-study" />
+        <module name="ws-client-demo" />
         <module name="traffic-sharpping" />
         <module name="basic" />
         <module name="pool-study" />
@@ -69,6 +73,7 @@
       <module name="netty-server" options="-parameters" />
       <module name="pool-study" options="-parameters" />
       <module name="programmercarl" options="-parameters" />
+      <module name="reactor" options="-parameters" />
       <module name="redis-client-study" options="-parameters" />
       <module name="send-queue-heap-up" options="-parameters" />
       <module name="simpleConfigCenterV1" options="" />
@@ -76,6 +81,10 @@
       <module name="small-mq" options="-parameters" />
       <module name="spring-boot-test" options="-parameters" />
       <module name="traffic-sharpping" options="-parameters" />
+      <module name="webflux-demo" options="-parameters" />
+      <module name="webflux-study" options="-parameters" />
+      <module name="websocket-demo" options="-parameters" />
+      <module name="ws-client-demo" options="-parameters" />
       <module name="zk-study" options="-parameters" />
     </option>
   </component>
