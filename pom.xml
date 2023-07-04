@@ -49,6 +49,7 @@
         <module>redis-client-study</module>
         <module>reactor</module>
         <module>webflux-study</module>
+        <module>spring-boot-study</module>
     </modules>
 
     <dependencies>
