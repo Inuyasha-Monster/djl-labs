@@ -6,9 +6,9 @@ import java.util.*;
  * @author djl
  */
 public class TreeNode {
-    private final int val;
-    private TreeNode left;
-    private TreeNode right;
+    public final int val;
+    public TreeNode left;
+    public TreeNode right;
 
     public TreeNode(int val) {
         this.val = val;

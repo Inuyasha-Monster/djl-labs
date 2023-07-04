@@ -1,5 +1,7 @@
 package other;
 
+import tree.TreeNode;
+
 import java.util.Arrays;
 
 public class LeetCode_20230704 {
@@ -82,6 +84,57 @@ public class LeetCode_20230704 {
         for (int i = index; i < nums.length; i++) {
             nums[i] = 0;
         }
+    }
+
+    /**
+     * 112. 路径总和
+     * https://leetcode.cn/problems/path-sum/
+     * https://programmercarl.com/0112.%E8%B7%AF%E5%BE%84%E6%80%BB%E5%92%8C.html#%E6%80%9D%E8%B7%AF
+     *
+     * @param root
+     * @param targetSum
+     * @return
+     */
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        if (root == null) {
+            return false;
+        }
+        return innerImpl(root, targetSum - root.val);
+    }
+
+    private boolean innerImpl(TreeNode root, int count) {
+
+        // 中
+
+        // 判断是叶子节点同时count=0表示符合路径要求
+        if (root.left == null && root.right == null && count == 0) {
+            return true;
+        }
+        // 如果是叶子节点但是 count！=0 则直接返回失败，进而导致回溯
+        if (root.left == null && root.right == null) {
+            return false;
+        }
+
+        // 左
+        if (root.left != null) {
+            count -= root.left.val;
+            if (innerImpl(root.left, count)) {
+                return true;
+            }
+            count += root.left.val;
+        }
+
+        // 右
+        if (root.right != null) {
+            count -= root.right.val;
+            if (innerImpl(root.right, count)) {
+                return true;
+            }
+            count += root.right.val;
+        }
+
+        // 如果左右路径都不符合则返回匹配失败
+        return false;
     }
 
     public static void main(String[] args) {
