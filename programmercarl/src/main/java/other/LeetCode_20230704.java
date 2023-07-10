@@ -201,6 +201,13 @@ public class LeetCode_20230704 {
         List<List<Integer>> result = new ArrayList<>();
         innerImpl2(root, new ArrayList<>(), result);
         return result.stream().filter(x -> x.stream().mapToInt(c -> c).sum() == targetSum).collect(Collectors.toList());
+
+        // 思路 2：直接查找符合要求的路径，在递归的过程就判断路径总和是否符合要求
+    }
+
+
+    private void innerImpl3(TreeNode node, int count, List<Integer> nodePath, List<List<Integer>> result) {
+        
     }
 
     private void innerImpl2(TreeNode node, List<Integer> nodePath, List<List<Integer>> result) {
