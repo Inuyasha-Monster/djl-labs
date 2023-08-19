@@ -50,6 +50,7 @@
         <module>reactor</module>
         <module>webflux-study</module>
         <module>spring-boot-study</module>
+        <module>groovy-study</module>
     </modules>
 
     <dependencies>
