@@ -51,6 +51,7 @@
         <module>webflux-study</module>
         <module>spring-boot-study</module>
         <module>groovy-study</module>
+        <module>dag-study</module>
     </modules>
 
     <dependencies>
